@@ -5,7 +5,7 @@ import { BgStar, Polygon, StarData, Category, StarCoord, TextData, Goal, Section
 import { Point, CircleData, Planet, SolarSystem } from 'src/app/helpers/types';
 import Konva from 'konva';
 import { Dialog, DialogRef, DIALOG_DATA } from '@angular/cdk/dialog';
-import { CIRCLE_STROKE_COLOUR, CIRCLE_STROKE_WIDTH, HIGHLIGHT_CIRCLE_STROKE_COLOUR, HIGHLIGHT_CIRCLE_STROKE_WIDTH, HIGHLIGHT_ORBIT_CIRCLE_COLOUR, HIGHLIGHT_ORBIT_CIRCLE_WIDTH, NUM_BG_STARS, ORBIT_CIRCLE_STROKE_COLOUR, ORBIT_CIRCLE_STROKE_WIDTH, SELECT_CIRCLE_STROKE_COLOUR, SELECT_CIRCLE_STROKE_WIDTH } from './constants';
+import { CIRCLE_OPACITY, CIRCLE_STROKE_COLOUR, CIRCLE_STROKE_WIDTH, HIGHLIGHT_CIRCLE_STROKE_COLOUR, HIGHLIGHT_CIRCLE_STROKE_WIDTH, HIGHLIGHT_ORBIT_CIRCLE_COLOUR, HIGHLIGHT_ORBIT_CIRCLE_WIDTH, NUM_BG_STARS, ORBIT_CIRCLE_STROKE_COLOUR, ORBIT_CIRCLE_STROKE_WIDTH, SELECT_CIRCLE_OPACITY, SELECT_CIRCLE_STROKE_COLOUR, SELECT_CIRCLE_STROKE_WIDTH } from './constants';
 import { SectionDialogComponent } from './section-dialog.component';
 @Component({
     selector: 'app-solar-system',
@@ -16,13 +16,13 @@ import { SectionDialogComponent } from './section-dialog.component';
 export class SolarSystemComponent implements AfterViewInit {
     constructor(public dialog: Dialog) { }
 
-    openDialog(section:Section): void {
+    openDialog(section: Section): void {
         const dialogRef = this.dialog.open<string>(SectionDialogComponent, {
-            width: '250px',
             data: section
         });
-        const wedgeImg = document.getElementById('dialog-image');
-        wedgeImg.setAttribute('src', section.wedge.src);
+        // can add an image to the dialog card using this
+        // const wedgeImg = document.getElementById('dialog-image');
+        // wedgeImg.setAttribute('src', section.wedge.src);
         dialogRef.closed.subscribe(result => {
             console.log('The dialog was closed', result);
         });
@@ -35,6 +35,7 @@ export class SolarSystemComponent implements AfterViewInit {
     private starLayer: Konva.Layer;
     private sectionLayer: Konva.Layer;
     private bgRect: Konva.Rect;
+    private planetText: Konva.Text;
     private planetList: Planet[] = [];
     private sectionList: Section[] = [];
     private bgStarList: BgStar[] = [];
@@ -45,32 +46,36 @@ export class SolarSystemComponent implements AfterViewInit {
     private _viewSystemZoom: number = 3;
     private _addOrbitAngle: number = 60;
 
-
     setCategories: Array<Category> = [
         {
             name: "Experience",
             score: randInt(0, 100),
-            colour: "#74DB83",
+            colour: "yellow",
+            // colour: "#74DB83",
         },
         {
             name: "Knowledge",
             score: randInt(0, 100),
-            colour: "#62D6EA",
+            colour: "red",
+            // colour: "#62D6EA",
         },
         {
             name: "Employability",
             score: randInt(0, 100),
-            colour: "#EA7662",
+            colour: "green",
+            // colour: "#EA7662",
         },
         {
             name: "Readiness",
             score: randInt(0, 100),
-            colour: "#DB74CD",
+            colour: "blue",
+            // colour: "#DB74CD",
         },
         {
             name: "Networking",
             score: randInt(0, 100),
-            colour: "#F3EA6D",
+            colour: "purple",
+            // colour: "#F3EA6D",
         },
     ]
 
@@ -107,18 +112,38 @@ export class SolarSystemComponent implements AfterViewInit {
         setTimeout(() => {
             // draw the solar system, including the journey star in the centre
             // this has been separated so the user can switch between viewing their solar system and viewing an individual planet
-            this.drawSolarSystem();
+            this.startViewingSolarSystem();
         }, 0);
     }
 
-    private drawSolarSystem() {
+    private startViewingSolarSystem() {
+        this.planetLayer.hide();
+        this.starLayer.hide();
+        this.sectionLayer.hide();
+
+        this.bgRect.removeEventListener('click');
+        // unselect any clicked planets when the background is clicked
+        this.bgRect.on('click', (evt) => {
+            this.planetText.text('');
+            for (let i = 0; i < this.planetList.length; i++) {
+                this.planetList[i].collided = false;
+                this.planetList[i].clicked = false;
+                this.planetList[i].kplanetCircle.setAttrs({
+                    'stroke': CIRCLE_STROKE_COLOUR,
+                    'strokeWidth': CIRCLE_STROKE_WIDTH
+                });
+            }
+        });
+        // remove the section layer from the stage
         this.sectionLayer.destroy();
         this.stage.add(this.planetLayer);
         this.stage.add(this.starLayer);
+
         // add planets from this.planetList to this.planetLayer
         // start planets watching for mouse events and create the orbiting animation
         this.addPlanetsToLayer();
-
+        // start the animation
+        this.orbitAnimation.start();
         // generate and retrieve the data for a star
         this.starData = getStarData(
             this.setCategories,
@@ -130,28 +155,46 @@ export class SolarSystemComponent implements AfterViewInit {
         this.catPolygons = getCatPolygons(this.starData);
         var starGroup = this.getStarGroup(this.starData.starCoords, { x: 0, y: 0 }, 'gold');
         this.starLayer.add(starGroup);
-
+        this.planetLayer.show();
+        this.starLayer.show();
     }
 
     // has to be async so the toImage promise can be waited on
-    // TODO: create a BACK button to return to solar system view
     private async startViewingPlanet(planet: Planet) {
+        this.planetLayer.hide();
+        this.starLayer.hide();
+        this.sectionLayer.hide();
+        this.bgRect.removeEventListener('click');
+        // return to the solar system view when the background is clicked
+        this.bgRect.on('click', (e) => {
+            this.startViewingSolarSystem();
+        })
+        // ensure the orbitAnimation is stopped
         this.orbitAnimation.stop();
         this.planetLayer.destroy();
         this.starLayer.destroy();
         this.stage.add(this.sectionLayer);
+        this.planetText.setAttrs({
+            x: this.stage.width() / 2 - (this.planetText.fontSize() * this.planetText.pixelSize()) / 2,
+            y: this.stage.height() / 2 - 200,
+            fontSize: 30,
+        });
+        this.sectionLayer.add(this.planetText);
 
+        // create a wedge for each section
+        var planetRadius = 150
         for (let i = 0; i < planet.sections.length; i++) {
             const section = planet.sections[i];
             var wedge = new Konva.Wedge({
                 x: this.stage.width() / 2,
                 y: this.stage.height() / 2,
-                radius: 150,
+                radius: planetRadius,
                 angle: 90,
                 fill: section.category.colour,
                 stroke: CIRCLE_STROKE_COLOUR,
-                strokeWidth: CIRCLE_STROKE_WIDTH,
+                strokeWidth: 0,
                 rotation: i * 90,
+                opacity: 0.4
             });
             // this will eventually be the actual planet section image (still waiting on graphics)
             section.wedge = await wedge.toImage({
@@ -168,16 +211,16 @@ export class SolarSystemComponent implements AfterViewInit {
             text.listening(false);
 
             wedge.on('mouseover', (e) => {
+                var displayText = `${section.category.name}\n${section.goals.length} Goals`
+                text.text(displayText);
                 text.x(e.target.getAttr('x'));
-                text.y(e.target.getAttr('y') + (wedge.radius() + 20));
-                text.text(`${section.category.name}\n${section.goals.length} Goals`);
+                text.y(e.target.getAttr('y') + 200);
 
                 e.target.setAttr('stroke', HIGHLIGHT_CIRCLE_STROKE_COLOUR);
                 e.target.setAttr('strokeWidth', HIGHLIGHT_CIRCLE_STROKE_WIDTH);
 
                 e.target.moveToTop();
                 text.moveToTop();
-
             });
             wedge.on('mouseout', (e) => {
                 text.text('');
@@ -188,9 +231,23 @@ export class SolarSystemComponent implements AfterViewInit {
                 this.openDialog(section);
                 // this.drawSolarSystem();
             });
+
             this.sectionLayer.add(text);
             this.sectionLayer.add(wedge);
         }
+
+        // create the planet image 
+        var planetImg = new Konva.Image({
+            image: planet.image,
+            x: this.stage.width() / 2 - planetRadius,
+            y: this.stage.height() / 2 - planetRadius,
+            width: planetRadius * 2,
+            height: planetRadius * 2,
+        });
+        this.sectionLayer.add(planetImg);
+        planetImg.moveToBottom();
+        planetImg.listening(false);
+        this.sectionLayer.show();
     }
 
 
@@ -337,6 +394,7 @@ export class SolarSystemComponent implements AfterViewInit {
      *   
     */
     private addPlanetsToLayer() {
+        this.planetLayer.hide();
         this.planetLayer.destroyChildren();
         const planetCircles = [];
         const planetImgs = [];
@@ -349,7 +407,8 @@ export class SolarSystemComponent implements AfterViewInit {
                 y: planet.circle.center.y,
                 stroke: planet.circle.strokeColour,
                 strokeWidth: planet.circle.strokeWidth,
-                radius: planet.circle.radius
+                radius: planet.circle.radius,
+                opacity: CIRCLE_OPACITY
             });
 
             var planetImg = new Konva.Image({
@@ -365,7 +424,7 @@ export class SolarSystemComponent implements AfterViewInit {
             this.planetLayer.add(planetCircle);
             this.planetLayer.add(planetImg);
 
-            var text = new Konva.Text({
+            this.planetText = new Konva.Text({
                 x: 0,
                 y: 0,
                 text: '',
@@ -373,36 +432,37 @@ export class SolarSystemComponent implements AfterViewInit {
                 fontFamily: 'Arial',
                 fill: 'white'
             });
-            this.planetLayer.add(text);
+            this.planetLayer.add(this.planetText);
             // tell konva not to track any events on the text object for optimisation purposes
-            text.listening(false);
+            this.planetText.listening(false);
 
-            planetCircle.on('mouseover', function (e) {
+            planetCircle.on('mouseover', (e) => {
                 if (!planet.clicked) {
                     planet.collided = true;
-                    text.x(e.target.getAttr('x') - planet.name.length * 3);
-                    text.y(e.target.getAttr('y') - 40);
-                    text.text(planet.name);
+                    this.planetText.x(e.target.getAttr('x') - planet.name.length * 3);
+                    this.planetText.y(e.target.getAttr('y') - 40);
+                    this.planetText.text(planet.name);
 
-                    this.setAttr('stroke', HIGHLIGHT_CIRCLE_STROKE_COLOUR);
-                    this.setAttr('strokeWidth', HIGHLIGHT_CIRCLE_STROKE_WIDTH);
-
-                    this.moveToTop();
-                    text.moveToTop();
+                    e.target.setAttr('stroke', HIGHLIGHT_CIRCLE_STROKE_COLOUR);
+                    e.target.setAttr('strokeWidth', HIGHLIGHT_CIRCLE_STROKE_WIDTH);
+                    e.target.setAttr('opacity', SELECT_CIRCLE_OPACITY);
+                    e.target.moveToTop();
+                    this.planetText.moveToTop();
                 }
             });
-            planetCircle.on('mouseout', function () {
+            planetCircle.on('mouseout', (e) => {
                 // keep the clicked planet selected on mouseout
                 if (!planet.clicked) {
                     planet.collided = false;
 
-                    text.text('');
+                    this.planetText.text('');
 
-                    this.setAttr('stroke', CIRCLE_STROKE_COLOUR);
-                    this.setAttr('strokeWidth', CIRCLE_STROKE_WIDTH);
+                    e.target.setAttr('stroke', CIRCLE_STROKE_COLOUR);
+                    e.target.setAttr('strokeWidth', CIRCLE_STROKE_WIDTH);
+                    e.target.setAttr('opacity', CIRCLE_OPACITY);
+
                 }
             });
-
             planetCircle.on('click', (e) => {
                 // reset any other clicked planets when a planet is clicked
                 for (let i = 0; i < this.planetList.length; i++) {
@@ -432,7 +492,6 @@ export class SolarSystemComponent implements AfterViewInit {
                 this.startViewingPlanet(this.planetList[i]);
             })
 
-
             var orbitCircle = new Konva.Circle({
                 x: planet.orbitCircle.center.x,
                 y: planet.orbitCircle.center.y,
@@ -442,10 +501,9 @@ export class SolarSystemComponent implements AfterViewInit {
                 radius: planet.orbitCircle.radius
             });
 
-
             // currently, just clear any currently clicked planets if an orbit circle is clicked
             orbitCircle.on('click', (e) => {
-                text.text('');
+                this.planetText.text('');
                 for (let i = 0; i < this.planetList.length; i++) {
                     this.planetList[i].collided = false;
                     this.planetList[i].clicked = false;
@@ -469,25 +527,11 @@ export class SolarSystemComponent implements AfterViewInit {
             //     planet.collided = false;
             // });
 
-
             planetImgs.push(planetImg);
             planetCircles.push(planetCircle);
             orbitCircle.moveToBottom();
             planetCircle.moveToTop();
         }
-
-        // unselect any clicked planets when the background is clicked
-        this.bgRect.on('click', (evt) => {
-            text.text('');
-            for (let i = 0; i < this.planetList.length; i++) {
-                this.planetList[i].collided = false;
-                this.planetList[i].clicked = false;
-                this.planetList[i].kplanetCircle.setAttrs({
-                    'stroke': CIRCLE_STROKE_COLOUR,
-                    'strokeWidth': CIRCLE_STROKE_WIDTH
-                });
-            }
-        });
 
         var midpoint = this.getCanvasMidPoint();
 
@@ -517,13 +561,14 @@ export class SolarSystemComponent implements AfterViewInit {
                     // the planet image must have its point adjusted, to ensure it is placed in the centre of the circle
                     planetImgs[i].x(newCentre.x - this.planetList[i].circle.radius);
                     planetImgs[i].y(newCentre.y - this.planetList[i].circle.radius);
+                    // planetImgs[i].rotation((frame.time - this.planetList[i].lostFrames) % 360)
                 } else {
                     // increase the lost frames counter whenever the planet misses a frame due to mouse events
                     this.planetList[i].lostFrames += frame.timeDiff;
                 }
             }
         }, this.planetLayer);
-        this.orbitAnimation.start();
+        this.planetLayer.show();
     }
 
     // TODO: a private centrePoint value should be created in AfterInit function rather than relying on this function

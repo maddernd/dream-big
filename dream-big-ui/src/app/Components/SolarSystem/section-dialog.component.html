@@ -2,16 +2,10 @@
   <mat-card-header>
     <mat-card-title> {{ data.category.name }} </mat-card-title>
   </mat-card-header>
-  <img id="dialog-image" mat-card-image alt="Image of a Section">
+  <img id="dialog-image" mat-card-image>
   <mat-card-content>
     
-      <label id="favorite-animal">What's your favorite category?</label>
-      <input
-        for="favorite-animal"
-        [(ngModel)]="data.category.name"
-        placeholder="Enter your name"
-      />
-    
+      <app-star-wizard></app-star-wizard>
   </mat-card-content>
   <mat-divider></mat-divider>
   <mat-card-actions>
