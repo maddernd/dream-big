@@ -269,7 +269,6 @@ export class SolarSystemComponent implements AfterViewInit {
         const midPoint = this.getCanvasMidPoint();
 
         for (let i = 0; i < randInt(2, 7); i++) {
-
             let orbitDist = (minOrbitDist * this._viewSystemZoom) + ((++orbitCtr * addOrbitDist) % maxOrbitDist)
             let angle = angleCtr;
 
