@@ -119,6 +119,25 @@ Installation steps:
 
     Open a terminal window and navigate to the root folder of the DreamBig project, enter and run the following line `docker compose up`, this will create a docker container that simulates the backend of the project, you can now also start this container by going directly to the Docker GUI program and run the dream-big container in the **Containers/Applications** tab on the left.
 
+***
+
+## **Backend Developer Set Up**
+
+1. Open your terminal and navigate to location where you want to store Dream-Big folder. 
+
+2. Run`git clone https://github.com/maddernd/dream-big`. The folder should be in your location and you can run code . to open the folder in visual studio code. Use git pull to get the latest version of Dream Big.
+
+3. If code . is not working, open the Visual Studio Code application, and type Command + Shift + P and type the command 'install code'. Then enter it. Visual Studio Application: shell command ' code' successfully installed in PATH will pop up and you will be able to use code . to open up visual studio code. 
+
+4. Download Docker from `https://www.docker.com/products/docker-desktop/`
+
+5. After downloading Docker, navigate to your Dream-big folder in terminal and run `docker compose up`(Docker desktop app must be open). This will create a container which will be the backend of the project.
+
+6. After running `docker compose up`(it will host the backend) just navigate to `http://localhost:3000/api/docs#!`. You can now run APIs via swagger.
+
+7. You will have to press migrate APIs if it is your first time going through this.
+
+
 
 [comment]: # (--------------------The Links for MacOS--------------------)
 
@@ -139,3 +158,4 @@ Installation steps:
 [win-5]: <https://www.docker.com/get-started/> "Docker"
 
 [win-6]: <https://aka.ms/wsl2kernel> "WSL Update package"
+

@@ -35,6 +35,7 @@ import { ProfileComponent } from './Components/profile/profile.component';
 import { SolarSystemComponent } from './Components/SolarSystem/solar-system.component';
 import { KonvStarComponent } from './Components/KonvaStar/konv-star.component';
 import { SectionDialogComponent } from './Components/SolarSystem/section-dialog.component';
+import { AvatarComponent } from './helpers/avatar/avatar.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,9 @@ import { SectionDialogComponent } from './Components/SolarSystem/section-dialog.
     // HomeComponent,
     SolarSystemComponent,
     KonvStarComponent,
-    SectionDialogComponent
+    SectionDialogComponent,
+    AvatarComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserAnimationsModule,
