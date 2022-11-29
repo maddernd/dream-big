@@ -1,5 +1,5 @@
+require File.expand_path('../boot', __FILE__)
 require_relative "boot"
-
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
@@ -10,6 +10,14 @@ module DreamBig_Api
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.0
+
+    Dotenv::Railtie.load
+
+    # ==> Authentication Method
+    # Authentication method default is database, but possible settings
+    # are: database, aaf, or saml. It can be overridden using the DF_AUTH_METHOD
+    # environment variable.
+    config.auth_method = (ENV['DF_AUTH_METHOD'] || :database).to_sym
 
     # Configuration for the application, engines, and railties goes here.
     #
