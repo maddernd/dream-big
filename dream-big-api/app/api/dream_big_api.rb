@@ -45,6 +45,7 @@ class DreamBigApi < Grape::API
   end
 
   #mount DreamBigApi
+  mount AuthenticationApi
   mount CategoryApi
   mount UsersApi
   mount StudentApi
