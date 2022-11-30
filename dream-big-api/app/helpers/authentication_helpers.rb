@@ -1,6 +1,14 @@
 module AuthenticationHelpers
   module_function
 
+  # TODO: Add further checks here
+  def authenticate_request
+    header = headers["Authorization"]
+    header = header.split(" ").last if header
+    decoded = jwt_decode(header)
+    @current_user = User.find(decoded[:user_id])
+  end
+
   #
   # Returns true if using SAML2.0 auth strategy
   #
