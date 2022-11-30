@@ -5,7 +5,6 @@ Rails.application.routes.draw do
 # root "articles#index"
 
 resources :users
-post '/auth/login', to: 'authentication#login' 
 mount DreamBigApi => '/'
 mount GrapeSwaggerRails::Engine => '/api/docs'
 end

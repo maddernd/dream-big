@@ -31,7 +31,7 @@ export class AuthService {
     // post to fake back end, this url will be handled there...
 
     return this.http
-      .post<any>(this.uri + '/auth/login', { email: email, password: password })
+      .post<any>(this.uri + '/api/authentication/login', { email: email, password: password })
       .pipe(
         map(user => {
           // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
