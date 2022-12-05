@@ -1,4 +1,3 @@
-=======
 ![Doubtfire Logo](http://puu.sh/lyClF/fde5bfbbe7.png)
 # Dream Big
 
@@ -125,18 +124,21 @@ Installation steps:
 
 1. Open your terminal and navigate to location where you want to store Dream-Big folder. 
 
-2. Run`git clone https://github.com/maddernd/dream-big`. The folder should be in your location and you can run code . to open the folder in visual studio code. Use git pull to get the latest version of Dream Big.
+2. Run `git clone https://github.com/maddernd/dream-big`. The folder should be in your location and you can run `code .` to open the folder in visual studio code. Use `git pull` to get the latest version of Dream Big.
 
-3. If code . is not working, open the Visual Studio Code application, and type Command + Shift + P and type the command 'install code'. Then enter it. Visual Studio Application: shell command ' code' successfully installed in PATH will pop up and you will be able to use code . to open up visual studio code. 
+3. If `code .` is not working, open the Visual Studio Code application, and type `Command + Shift + P` and type the command `install code`. Then enter it. Visual Studio Application: shell command ' code' successfully installed in PATH will pop up and you will be able to use `code `. to open up visual studio code. 
 
-4. Download Docker from `https://www.docker.com/products/docker-desktop/`
+4. Download [Docker](https://www.docker.com/products/docker-desktop/)
 
 5. After downloading Docker, navigate to your Dream-big folder in terminal and run `docker compose up`(Docker desktop app must be open). This will create a container which will be the backend of the project.
 
 6. After running `docker compose up`(it will host the backend) just navigate to `http://localhost:3000/api/docs#!`. You can now run APIs via swagger.
 
-7. You will have to press migrate APIs if it is your first time going through this.
+7. Note: You will have to press migrate APIs if it is your first time going through this.
 
+8. Download [DBeaver](https://dbeaver.io/) and install it for your designated operating system.
+
+9. Connect to the Dream Big database in DBeaver by creating a new MariaDB connection where the details match the [docker compose yaml](./docker-compose.yml). Note if the connection does not work with `host=localhost` a solution is to use `host=0.0.0.0`.
 
 
 [comment]: # (--------------------The Links for MacOS--------------------)

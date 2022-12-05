@@ -1,0 +1,9 @@
+planet:
+  id: 1
+  name: "test_planet"
+  journey_id: 1
+
+planet_2:
+  id: 2
+  name: "test_planet2"
+  journey_id: 1

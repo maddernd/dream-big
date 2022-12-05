@@ -1,0 +1,9 @@
+category_question:
+  id: 1
+  question: "question"
+  category_id: 1
+
+category_question_2:
+  id: 2
+  question: "What is the question"
+  category_id: 2

@@ -1,0 +1,9 @@
+section:
+  id: 1
+  planet_id: 1
+  category_id: 1
+
+section_2:
+  id: 2
+  planet_id: 1
+  category_id: 1

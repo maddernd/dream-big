@@ -1,0 +1,5 @@
+plan:
+  id: 1
+  section_id: 1
+  goal_id: 2
+  plan_text: "This is the plan"
