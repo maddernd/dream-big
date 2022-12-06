@@ -28,6 +28,7 @@ gem 'grape-swagger-rails' # UI for swagger
 # Auth / user management
 gem 'devise' # user auth framework...
 gem 'jwt'
+gem 'json-jwt'
 gem 'active_model_serializers'
 gem 'faker'
 group :development, :test do

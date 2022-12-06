@@ -17,6 +17,9 @@ services:
       DEV_DB_USERNAME: dream
       DEV_DB_PASSWORD: pwd
       DEV_DB_HOST: dream-big-dev-db
+      # The DF_AUTH_METHOD can only be (aaf | database)
+      DF_AUTH_METHOD: aaf
+      DF_AAF_UNIQUE_URL: 'https://rapid.test.aaf.edu.au/jwt/authnrequest/research/uANgVtrYRGBUu586xWsw4Q'
     command:
       /bin/bash -c 'rm -f /api/tmp/pids/server.pid && bundle install && rails db:migrate RAILS_ENV=test && rails db:migrate && rails s -b 0.0.0.0'
 
