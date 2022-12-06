@@ -73,12 +73,14 @@ GEM
       tzinfo (~> 2.0)
     addressable (2.8.0)
       public_suffix (>= 2.0.2, < 5.0)
+    aes_key_wrap (1.1.0)
     ast (2.4.2)
     bcrypt (3.1.18)
     better_errors (2.9.1)
       coderay (>= 1.0.0)
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
+    bindata (2.4.14)
     bootsnap (1.12.0)
       msgpack (~> 1.2)
     builder (3.2.4)
@@ -136,6 +138,12 @@ GEM
       railties (>= 5.0.0)
     faker (2.21.0)
       i18n (>= 1.8.11, < 2)
+    faraday (2.7.1)
+      faraday-net_http (>= 2.0, < 3.1)
+      ruby2_keywords (>= 0.0.4)
+    faraday-follow_redirects (0.3.0)
+      faraday (>= 1, < 3)
+    faraday-net_http (3.0.2)
     ffi (1.15.5)
     globalid (1.0.0)
       activesupport (>= 5.0)
@@ -160,6 +168,12 @@ GEM
     irb (1.4.1)
       reline (>= 0.3.0)
     json (2.6.2)
+    json-jwt (1.16.1)
+      activesupport (>= 4.2)
+      aes_key_wrap
+      bindata
+      faraday (~> 2.0)
+      faraday-follow_redirects
     jsonapi-renderer (0.2.2)
     jwt (2.4.1)
     listen (3.7.1)
@@ -339,6 +353,7 @@ DEPENDENCIES
   grape-swagger
   grape-swagger-rails
   i18n
+  json-jwt
   jwt
   listen
   minitest
