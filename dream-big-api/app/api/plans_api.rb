@@ -68,6 +68,7 @@ class PlansApi < Grape::API
     return true
   end
 
+  desc 'Get all the plans'
   get '/plans' do
     plans = Plan.all
 

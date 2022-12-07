@@ -65,6 +65,7 @@ class AnswersApi < Grape::API
     return true
   end
 
+  desc 'Get all the answers'
   get '/answers' do
     result = Answer.all
 

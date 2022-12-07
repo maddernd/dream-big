@@ -55,6 +55,7 @@ class AvatarTorsosApi < Grape::API
     return true
   end
 
+  desc 'get all the avatar torsos'
   get '/avatar-torsos' do
     result = AvatarTorso.all
 

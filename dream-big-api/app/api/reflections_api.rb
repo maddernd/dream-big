@@ -67,6 +67,7 @@ class ReflectionsApi < Grape::API
     return true
   end
 
+  desc 'Get all the reflections'
   get '/reflections' do
     reflections = Reflection.all
 

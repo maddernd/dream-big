@@ -67,6 +67,7 @@ class UsersApi < Grape::API
     true
   end
 
+  desc 'Get all the users'
   params do
     optional :filter, type: String, desc: 'Limit response to those users starting with this filter'
   end

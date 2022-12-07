@@ -55,6 +55,7 @@ class AvatarHeadsApi < Grape::API
     return true
   end
 
+  desc 'Get all the avatar heads'
   get '/avatar-heads' do
     result = AvatarHead.all
 
