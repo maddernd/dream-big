@@ -63,6 +63,7 @@ class SectionsApi < Grape::API
     return true
   end
 
+  desc 'Get all the selections'
   get '/sections' do
     sections = Section.all
 
