@@ -57,6 +57,7 @@ class CategoryApi < Grape::API
     return true
   end
 
+  desc 'Get all the categories'
   get '/category' do
     result = Category.all
 

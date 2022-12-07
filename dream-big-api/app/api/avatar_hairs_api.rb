@@ -55,6 +55,7 @@ class AvatarHairsApi < Grape::API
     return true
   end
 
+  'Get all the avatar hairs'
   get '/avatar-hairs' do
     result = AvatarHair.all
 

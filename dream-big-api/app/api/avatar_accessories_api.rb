@@ -55,6 +55,7 @@ class AvatarAccessoriesApi < Grape::API
     return true
   end
 
+  desc 'Get all the avatar accessories'
   get '/avatar-accessories' do
     result = AvatarAccessory.all
 

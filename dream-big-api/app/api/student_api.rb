@@ -84,6 +84,7 @@ class StudentApi < Grape::API
     true
   end
 
+  desc 'Get all the students'
   get '/student' do
     result = Student.all
 

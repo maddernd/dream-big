@@ -67,6 +67,7 @@ class GoalsApi < Grape::API
     return true
   end
 
+  desc 'Get all the goals'
   get '/goals' do
     goals = Goal.all
 
