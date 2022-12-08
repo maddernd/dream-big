@@ -5,7 +5,6 @@ const KEYS =
     'id',
     'journey_id',
     'category_id'
-  
   ];
 
 export class Assessment extends Entity {
@@ -13,7 +12,6 @@ export class Assessment extends Entity {
   journey_id: number = -1;
   category_id: number = -1;
   
-
   /**
    * Indicates that the Unit has yet to be stored in the database
    */
