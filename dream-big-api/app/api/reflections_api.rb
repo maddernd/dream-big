@@ -45,8 +45,8 @@ class ReflectionsApi < Grape::API
       .new(params)
       .permit(
         :section_id,
-        :description,
-        :status
+        :goal_id,
+        :reflection_text
       )
 
     # Auth

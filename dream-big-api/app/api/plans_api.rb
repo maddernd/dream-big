@@ -45,7 +45,6 @@ class PlansApi < Grape::API
       .new(params)
       .permit(
         :section_id,
-        :section_id,
         :goal_id,
         :plan_text
       )

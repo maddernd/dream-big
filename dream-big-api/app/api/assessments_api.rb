@@ -40,7 +40,6 @@ class AssessmentsApi < Grape::API
   put '/assessments/:id' do
     assessments_parameters = ActionController::Parameters.new(params)
       .permit(
-        :id,
         :journey_id,
         :category_id
       )
