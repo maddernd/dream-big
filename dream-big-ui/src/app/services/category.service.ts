@@ -23,7 +23,6 @@ export class CategoryService extends CachedEntityService<Category> {
     super(httpClient, API_URL);
   
   this.mapping.addKeys(
-    'id',
     'name',
     'description',
   );
