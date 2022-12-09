@@ -62,6 +62,7 @@ class AssessmentsApi < Grape::API
     return true
   end
 
+  desc 'Get all the assessments'
   get '/assessments' do
     result = Assessment.all
 

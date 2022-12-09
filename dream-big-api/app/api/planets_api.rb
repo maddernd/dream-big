@@ -63,6 +63,7 @@ class PlanetsApi < Grape::API
     return true
   end
 
+  'Get all the planets'
   get '/planets' do
     planets = Planet.all
 

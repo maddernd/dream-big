@@ -160,6 +160,20 @@
     text-align: center;
   }
 
+  .discardPopUp{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: fixed;
+    border: 2px solid #333;
+    padding: 1rem;
+    text-align: center;
+    background-color: white;
+    z-index: 10000000;
+    width: 300px;
+    top: 35%;
+  }
+
   @media (min-width: 755px) {
     .avatar {
       width: auto;

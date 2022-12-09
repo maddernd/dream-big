@@ -62,6 +62,7 @@ class CategoryQuestionsApi < Grape::API
     true
   end
 
+  desc 'Get all the catagory questions'
   get '/category-questions' do
     result = CategoryQuestion.all
 

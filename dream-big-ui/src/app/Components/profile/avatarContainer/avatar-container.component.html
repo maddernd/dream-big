@@ -18,7 +18,7 @@
       >
       </app-avatar>
       <br/>
-      <button (click)="profileForm = !profileForm">
+      <button (click)="toggleProfileForm()">
         <ng-container *ngIf="!profileForm">EDIT PROFILE</ng-container>
         <ng-container *ngIf="profileForm">BACK</ng-container>
       </button>
@@ -173,10 +173,21 @@
         </div>
       </ng-container>
 
-        <button class="save">
-         Save
+        <button (click)="save()" class="save">
+         SAVE
         </button>
     </div>
-
+    </div>
+    <div *ngIf="DiscardPopUp" class="discardPopUp">
+      <p>
+        You haven't saved your changes. Did you still want to return?
+        This will discard all changes made.
+      </p>
+      <button (click)="discard()">
+        YES
+      </button>
+      <button (click)="dontDiscard()">
+        NO
+      </button>
     </div>
   </div>

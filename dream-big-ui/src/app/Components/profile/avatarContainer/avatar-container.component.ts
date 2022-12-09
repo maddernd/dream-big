@@ -144,13 +144,107 @@ export class AvatarContainerComponent implements OnInit {
 
   private url: string;
 
+  //profile form toggle check
+  public profileForm : boolean = false;
+
+  //Avatar Data ScreenShots:
+  public initAvatarScreenShot: [string, HairTypes, string, string, ClothingTypes, string, string];
+  public updatedAvatarScreenShot: [string, HairTypes, string, string, ClothingTypes, string, string];
+
+  //discard pop up toggle
+  public DiscardPopUp : boolean = false;
+
   constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
     this.goCompletelyRandom();
+    //sets init avatar data
+    this.setInitAvatarScreenShot();
   }
 
-  profileForm = false;
+  //change/update init avatar screenshot function
+  public setInitAvatarScreenShot(){
+    this.initAvatarScreenShot = [
+      this.colors.skin,
+      this.hairType.name,
+      this.colors.hair,
+      this.colors.accessory,
+      this.clothing.name,
+      this.colors.clothes,
+      this.colors.graphic
+    ]
+  }
+  //change/update updated avatar screenshot function
+  public setUpdatedAvatarScreenShot(){
+    this.updatedAvatarScreenShot = [
+      this.colors.skin,
+      this.hairType.name,
+      this.colors.hair,
+      this.colors.accessory,
+      this.clothing.name,
+      this.colors.clothes,
+      this.colors.graphic
+    ]
+  }
+
+  //compares two arrays, if different, returns false, if same, returns true
+  public compareAvatarScreenShots(init : Array<string>, updated : Array<string>) : boolean{
+    for(let i = 0; i < init.length - 1; i++){
+      if(init[i] != updated[i]){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  //reverts avatar to original state before changes
+  public revertAvatar(){
+    this.colors.skin = this.initAvatarScreenShot[0];
+    this.hairType.name = this.initAvatarScreenShot[1];
+    this.colors.hair = this.initAvatarScreenShot[2];
+    this.colors.accessory = this.initAvatarScreenShot[3];
+    this.clothing.name = this.initAvatarScreenShot[4];
+    this.colors.clothes = this.initAvatarScreenShot[5];
+    this.colors.graphic = this.initAvatarScreenShot[6];
+  }
+
+  //saves new avatar data
+  public save(){
+    alert("Avatar saved!");
+    this.setInitAvatarScreenShot();
+  }
+
+  //toggles the profile form but also checks if user has saved and changes before closing
+  public toggleProfileForm(){
+    //if profile form is showing
+    if(this.profileForm == true){
+      this.setUpdatedAvatarScreenShot();//update the updateAvatarScreenshot with Avatar's current data
+      //if the avatar data hasn't changed
+      if (this.compareAvatarScreenShots(this.initAvatarScreenShot, this.updatedAvatarScreenShot)){
+        this.profileForm = false; //close form
+      }
+      //if avatar has changed
+      else{
+        this.DiscardPopUp = true;//show discard pop up
+      }
+    //if profile form isnt showing, show it
+    }else{
+      this.profileForm = true;
+    }
+  }
+
+  //if user chooses to discard avatar changes
+  public discard(){
+    this.DiscardPopUp = false; //close pop up
+    this.profileForm = !this.profileForm; //close profile form
+    this.revertAvatar(); //reverts avatar to orginal state before changing
+    this.setInitAvatarScreenShot(); //retakes init avatar screenshot
+  }
+
+  //if user chooses not to discard avatar changes
+  public dontDiscard(){
+    this.DiscardPopUp = false; //close pop up
+  }
 
   public goCompletelyRandom(): void {
     this.getRandomColors();
@@ -209,7 +303,6 @@ export class AvatarContainerComponent implements OnInit {
 
   public iterateOverHairTypes(upwards: boolean): void {
     this.hairType = this.iterateOverOptions(this.hairType, this.hairTypesArray, HairTypes, upwards);
-    console.log(this.hairType);
   }
 
   public iterateOverEyebrowTypes(upwards: boolean): void {

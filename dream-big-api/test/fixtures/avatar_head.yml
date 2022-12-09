@@ -1,0 +1,6 @@
+head:
+  id: 1
+  imgpath: "\path_to_head_image.jpg"
+head_2:
+  id: 2
+  imgpath: "\path_to_head_image_2.jpg"
