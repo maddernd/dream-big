@@ -20,16 +20,13 @@ import { AuthService } from './services/auth.service';
 // component imports
 import { NavbarComponent } from './Components/navbar/navbar.component';
 import { StarControlComponent } from './Components/StarControl/star-control.component';
-// import { StarComponent } from './Components/Star/star.component';
 import { AppComponent } from './app.component';
 import { IntroPageComponent } from './Components/intro-page/intro-page.component';
 import { TableComponentModule } from './admin/generic/table.component';
-// import { StarMapComponent } from './Components/StarMap/star-map.component';
 import { StepsComponent } from './Components/Wizard-Assessment/steps/steps.component';
 import { StepTemplateComponent } from './Components/Wizard-Assessment/steps-template/steps-template.component';
 import { StarWizardComponent } from './Components/Wizard-Assessment/star-wizard/star-wizard.component';
 import { CompleteWizardComponent } from './Components/Wizard-Assessment/complete-wizard/complete-wizard.component';
-// import { HomeComponent } from './Components/home/home.component';
 import { LoginComponent } from './Components/login/login.component';
 import { ProfileComponent } from './Components/profile/profile.component';
 import { SolarSystemComponent } from './Components/SolarSystem/solar-system.component';
@@ -43,15 +40,12 @@ import { AvatarContainerComponent } from './Components/profile/avatarContainer/a
     AppComponent,
     NavbarComponent,
     StarControlComponent,
-    // StarComponent,
     IntroPageComponent,
     LoginComponent,
-    // StarMapComponent,
     StepsComponent,
     StepTemplateComponent,
     StarWizardComponent,
     CompleteWizardComponent,
-    // HomeComponent,
     SolarSystemComponent,
     KonvStarComponent,
     SectionDialogComponent,
