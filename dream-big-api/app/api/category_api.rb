@@ -9,7 +9,6 @@ class CategoryApi < Grape::API
     present result, with: Entities::CategoryEntity
   end
 
-  desc 'Allow creation of a category'
   params do
     requires :id, type: Integer, desc: 'Category ID'
     requires :name, type: String, desc: 'Category name'
@@ -18,7 +17,6 @@ class CategoryApi < Grape::API
   post '/category' do
     category_parameters = ActionController::Parameters.new(params)
       .permit(
-        :id,
         :name,
         :description
       )
@@ -32,7 +30,6 @@ class CategoryApi < Grape::API
 
   desc 'Allow updating of a categories'
   params do
-    requires :id, type: Integer, desc: 'The category ID'
     optional :name, type: String, desc: 'The category name'
     optional :description, type: String, desc: 'The description of the category'
   end
