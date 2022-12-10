@@ -5,8 +5,8 @@ class AvatarTorsosApi < Grape::API
   get '/avatar-torsos/:id' do
     # Auth
 
-    result = AvatarTorso.find(params[:id])
-    present result, with: Entities::AvatarTorsosEntity
+    torso = AvatarTorso.find(params[:id])
+    present torso, with: Entities::AvatarTorsosEntity
   end
 
   desc 'Allow creation of an Avatar Torsos'
@@ -21,9 +21,9 @@ class AvatarTorsosApi < Grape::API
 
     # Auth...
 
-    result = AvatarHair.create!(avatar_torsos_parameters)
+    createdTorso = AvatarHair.create!(avatar_torsos_parameters)
 
-    present result, with: Entities::AvatarTorsosEntity
+    present createdTorso, with: Entities::AvatarTorsosEntity
   end
 
   desc 'Allow updating of a Avatar Torsos'
@@ -39,10 +39,10 @@ class AvatarTorsosApi < Grape::API
 
     # Auth
 
-    result = avatar_torsos_parameters.find(params[:id])
-    result.update!(avatar_torsos_parameters)
+    updateTorso = avatar_torsos_parameters.find(params[:id])
+    updateTorso.update!(avatar_torsos_parameters)
 
-    present result, with: Entities::AvatarTorsosEntity
+    present updateTorso, with: Entities::AvatarTorsosEntity
   end
 
   desc 'Delete the Avatar Torsos with the indicated id'
@@ -57,8 +57,8 @@ class AvatarTorsosApi < Grape::API
 
   desc 'get all the avatar torsos'
   get '/avatar-torsos' do
-    result = AvatarTorso.all
+    avatarTorsos = AvatarTorso.all
 
-    present result, with: Entities::AvatarTorsosEntity
+    present avatarTorsos, with: Entities::AvatarTorsosEntity
   end
 end

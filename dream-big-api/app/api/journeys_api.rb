@@ -5,8 +5,8 @@ class JourneysApi < Grape::API
   get '/journeys/:id' do
     # Auth
 
-    result = Journey.find(params[:id])
-    present result, with: Entities::JourneysEntity
+    journey = Journey.find(params[:id])
+    present journey, with: Entities::JourneysEntity
   end
 
   desc 'Allow creation of a Journey'
@@ -24,9 +24,9 @@ class JourneysApi < Grape::API
 
     # Auth...
 
-    result = Journey.create!(journey_parameters)
+    createdJourney = Journey.create!(journey_parameters)
 
-    present result, with: Entities::JourneysEntity
+    present createdJourney, with: Entities::JourneysEntity
   end
 
   desc 'Allow updating of a Journey'
@@ -43,10 +43,10 @@ class JourneysApi < Grape::API
 
     # Auth
 
-    result = Journey.find(params[:id])
-    result.update!(journey_parameters)
+    updateJourney = Journey.find(params[:id])
+    updateJourney.update!(journey_parameters)
 
-    present result, with: Entities::JourneysEntity
+    present updateJourney, with: Entities::JourneysEntity
   end
 
   desc 'Delete the journey with the indicated id'
@@ -61,8 +61,8 @@ class JourneysApi < Grape::API
 
   desc 'Get all the journeys'
   get '/journeys' do
-    result = Journey.all
+    journeys = Journey.all
 
-    present result, with: Entities::JourneysEntity
+    present journeys, with: Entities::JourneysEntity
   end
 end

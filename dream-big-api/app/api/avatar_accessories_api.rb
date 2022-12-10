@@ -5,8 +5,8 @@ class AvatarAccessoriesApi < Grape::API
   get '/avatar-accessories/:id' do
     # Auth
 
-    result = AvatarAccessory.find(params[:id])
-    present result, with: Entities::AvatarAccessoriesEntity
+    accessory = AvatarAccessory.find(params[:id])
+    present accessory, with: Entities::AvatarAccessoriesEntity
   end
 
   desc 'Allow creation of an Avatar Accessory'
@@ -21,9 +21,9 @@ class AvatarAccessoriesApi < Grape::API
 
     # Auth...
 
-    result = AvatarAccessory.create!(avatar_accessories_parameters)
+    createdAccessory = AvatarAccessory.create!(avatar_accessories_parameters)
 
-    present result, with: Entities::AvatarAccessoriesEntity
+    present createdAccessory, with: Entities::AvatarAccessoriesEntity
   end
 
   desc 'Allow updating of a Avatar accessories'
@@ -39,10 +39,10 @@ class AvatarAccessoriesApi < Grape::API
 
     # Auth
 
-    result = AvatarAccessory.find(params[:id])
-    result.update!(avatar_accessories_parameters)
+    updateAccessory = AvatarAccessory.find(params[:id])
+    updateAccessory.update!(avatar_accessories_parameters)
 
-    present result, with: Entities::AvatarAccessoriesEntity
+    present updateAccessory, with: Entities::AvatarAccessoriesEntity
   end
 
   desc 'Delete the Avatar with the indicated id'
@@ -57,8 +57,8 @@ class AvatarAccessoriesApi < Grape::API
 
   desc 'Get all the avatar accessories'
   get '/avatar-accessories' do
-    result = AvatarAccessory.all
+    avatarAccessories = AvatarAccessory.all
 
-    present result, with: Entities::AvatarAccessoriesEntity
+    present avatarAccessories, with: Entities::AvatarAccessoriesEntity
   end
 end

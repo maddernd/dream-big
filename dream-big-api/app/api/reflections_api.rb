@@ -28,9 +28,9 @@ class ReflectionsApi < Grape::API
 
     # Auth...
 
-    reflection = Reflection.create!(reflection_parameters)
+    createdReflection = Reflection.create!(reflection_parameters)
 
-    present reflection, with: Entities::ReflectionsEntity
+    present createdReflection, with: Entities::ReflectionsEntity
   end
 
   desc 'Allow updating of a Goal'
@@ -51,10 +51,10 @@ class ReflectionsApi < Grape::API
 
     # Auth
 
-    reflection = Reflection.find(params[:id])
-    reflection.update!(reflection_parameters)
+    updateReflection = Reflection.find(params[:id])
+    updateReflection.update!(reflection_parameters)
 
-    present reflection, with: Entities::ReflectionsEntity
+    present updateReflection, with: Entities::ReflectionsEntity
   end
 
   desc 'Delete the reflection with the indicated id'

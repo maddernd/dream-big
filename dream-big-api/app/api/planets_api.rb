@@ -26,9 +26,9 @@ class PlanetsApi < Grape::API
 
     # Auth...
 
-    planet = Planet.create!(planet_parameters)
+    createdPlanet = Planet.create!(planet_parameters)
 
-    present planet, with: Entities::PlanetsEntity
+    present createdPlanet, with: Entities::PlanetsEntity
   end
 
   desc 'Allow updating of a Planet'
@@ -47,10 +47,10 @@ class PlanetsApi < Grape::API
 
     # Auth
 
-    planet = Planet.find(params[:id])
-    planet.update!(planet_parameters)
+    updatePlanet = Planet.find(params[:id])
+    updatePlanet.update!(planet_parameters)
 
-    present planet, with: Entities::PlanetsEntity
+    present updatePlanet, with: Entities::PlanetsEntity
   end
 
   desc 'Delete the Planet with the indicated id'

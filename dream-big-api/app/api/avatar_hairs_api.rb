@@ -5,8 +5,8 @@ class AvatarHairsApi < Grape::API
   get '/avatar-hairs/:id' do
     # Auth
 
-    result = AvatarHair.find(params[:id])
-    present result, with: Entities::AvatarHairsEntity
+    hair = AvatarHair.find(params[:id])
+    present hair, with: Entities::AvatarHairsEntity
   end
 
   desc 'Allow creation of an Avatar Hairs'
@@ -21,9 +21,9 @@ class AvatarHairsApi < Grape::API
 
     # Auth...
 
-    result = AvatarHair.create!(avatar_hairs_parameters)
+    createdHair = AvatarHair.create!(avatar_hairs_parameters)
 
-    present result, with: Entities::AvatarHairsEntity
+    present createdHair, with: Entities::AvatarHairsEntity
   end
 
   desc 'Allow updating of a Avatar Hairs'
@@ -39,10 +39,10 @@ class AvatarHairsApi < Grape::API
 
     # Auth
 
-    result = AvatarHair.find(params[:id])
-    result.update!(avatar_hairs_parameters)
+    updateHair = AvatarHair.find(params[:id])
+    updateHair.update!(avatar_hairs_parameters)
 
-    present result, with: Entities::AvatarHairsEntity
+    present updateHair, with: Entities::AvatarHairsEntity
   end
 
   desc 'Delete the Avatar Hairs with the indicated id'
@@ -55,10 +55,10 @@ class AvatarHairsApi < Grape::API
     return true
   end
 
-  'Get all the avatar hairs'
+  desc 'Get all the avatar hairs'
   get '/avatar-hairs' do
-    result = AvatarHair.all
+    avatarHairs = AvatarHair.all
 
-    present result, with: Entities::AvatarHairsEntity
+    present avatarHairs, with: Entities::AvatarHairsEntity
   end
 end

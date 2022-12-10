@@ -26,9 +26,9 @@ class SectionsApi < Grape::API
 
     # Auth...
 
-    section = Section.create!(section_parameters)
+    createdSection = Section.create!(section_parameters)
 
-    present section, with: Entities::SectionsEntity
+    present createdSection, with: Entities::SectionsEntity
   end
 
   desc 'Allow updating of a Section'
@@ -47,10 +47,10 @@ class SectionsApi < Grape::API
 
     # Auth
 
-    section = Section.find(params[:id])
-    section.update!(section_parameters)
+    updateSection = Section.find(params[:id])
+    updateSection.update!(section_parameters)
 
-    present section, with: Entities::SectionsEntity
+    present updateSection, with: Entities::SectionsEntity
   end
 
   desc 'Delete the Section with the indicated id'

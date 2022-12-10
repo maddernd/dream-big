@@ -5,8 +5,8 @@ class AnswersApi < Grape::API
   get '/answers/:id' do
     # Auth
 
-    result = Answer.find(params[:id])
-    present result, with: Entities::AnswersEntity
+    answer = Answer.find(params[:id])
+    present answer, with: Entities::AnswersEntity
   end
 
   desc 'Allow creation of an Answers'
@@ -27,9 +27,9 @@ class AnswersApi < Grape::API
 
     # Auth...
 
-    result = Answer.create!(answers_parameters)
+    createdAnswer = Answer.create!(answers_parameters)
 
-    present result, with: Entities::AnswersEntity
+    present createdAnswer, with: Entities::AnswersEntity
   end
 
   desc 'Allow updating of a Answers'
@@ -49,10 +49,10 @@ class AnswersApi < Grape::API
 
     # Auth
 
-    result = Answer.find(params[:id])
+    updateAnswer = Answer.find(params[:id])
     result.update! answers_parameters
 
-    present result, with: Entities::AnswersEntity
+    present updateAnswer, with: Entities::AnswersEntity
   end
 
   desc 'Delete the Answers with the indicated id'
@@ -67,8 +67,8 @@ class AnswersApi < Grape::API
 
   desc 'Get all the answers'
   get '/answers' do
-    result = Answer.all
+    answers = Answer.all
 
-    present result, with: Entities::AnswersEntity
+    present answers, with: Entities::AnswersEntity
   end
 end
