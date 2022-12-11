@@ -9,8 +9,8 @@ class CategoryApi < Grape::API
     present result, with: Entities::CategoryEntity
   end
 
+  desc 'Allow creation of a category'
   params do
-    requires :id, type: Integer, desc: 'Category ID'
     requires :name, type: String, desc: 'Category name'
     requires :description, type: String, desc: 'The description of the category'
   end
