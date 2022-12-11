@@ -25,9 +25,9 @@ class AssessmentsApi < Grape::API
 
     # Auth...
 
-    createdAssessment = Assessment.create!(assessments_parameters)
+    created_assessment = Assessment.create!(assessments_parameters)
 
-    present createdAssessment, with: Entities::AssessmentsEntity
+    present created_assessment, with: Entities::AssessmentsEntity
   end
 
   desc 'Allow updating of a Assessments'
@@ -47,10 +47,10 @@ class AssessmentsApi < Grape::API
 
     # Auth
 
-    updateAssessment = Assessment.find(params[:id])
-    updateAssessment.update! assessments_parameters
+    update_assessment = Assessment.find(params[:id])
+    update_assessment.update! assessments_parameters
 
-    present updateAssessment, with: Entities::AssessmentsEntity
+    present update_assessment, with: Entities::AssessmentsEntity
   end
 
   desc 'Delete the Assessments with the indicated id'

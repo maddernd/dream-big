@@ -39,9 +39,9 @@ class StudentApi < Grape::API
 
     # Auth...
 
-    createdStudent = Student.create!(student_parameters) 
+    created_student = Student.create!(student_parameters) 
 
-    present createdStudent, with: Entities::StudentEntity
+    present created_student, with: Entities::StudentEntity
   end
 
   desc 'Allow updating of a student'
@@ -69,10 +69,10 @@ class StudentApi < Grape::API
 
     # Auth
 
-    updateStudent = Student.find(params[:id])
-    updateStudent.update! student_parameters
+    update_student = Student.find(params[:id])
+    update_student.update! student_parameters
 
-    present updateStudent, with: Entities::StudentEntity
+    present update_student, with: Entities::StudentEntity
   end
 
   desc 'Delete the student with the indicated id'

@@ -53,9 +53,9 @@ class UsersApi < Grape::API
         :role_id
       )
 
-    updateUser = User.find(params[:id])
-    updateUser.update! user_parameters
-    present updateUser, with: Entities::UsersEntity
+    update_user = User.find(params[:id])
+    update_user.update! user_parameters
+    present update_user, with: Entities::UsersEntity
   end
 
   desc 'Delete the user with the indicated id'

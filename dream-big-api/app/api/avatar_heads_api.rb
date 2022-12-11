@@ -21,9 +21,9 @@ class AvatarHeadsApi < Grape::API
 
     # Auth...
 
-    createdHead = AvatarHead.create!(avatar_heads_parameters)
+    created_avatar_head = AvatarHead.create!(avatar_heads_parameters)
 
-    present createdHead, with: Entities::AvatarHeadsEntity
+    present created_avatar_head, with: Entities::AvatarHeadsEntity
   end
 
   desc 'Allow updating of a Avatar Heads'
@@ -39,10 +39,10 @@ class AvatarHeadsApi < Grape::API
 
     # Auth
 
-    updateHead = AvatarHead.find(params[:id])
-    updateHead.update! avatar_heads_parameters
+    update_avatar_head = AvatarHead.find(params[:id])
+    update_avatar_head.update! avatar_heads_parameters
 
-    present updateHead, with: Entities::AvatarHeadsEntity
+    present update_avatar_head, with: Entities::AvatarHeadsEntity
   end
 
   desc 'Delete the Avatar Heads with the indicated id'
@@ -57,8 +57,8 @@ class AvatarHeadsApi < Grape::API
 
   desc 'Get all the avatar heads'
   get '/avatar-heads' do
-    avatarHeads = AvatarHead.all
+    avatar_heads = AvatarHead.all
 
-    present avatarHeads, with: Entities::AvatarHeadsEntity
+    present avatar_heads, with: Entities::AvatarHeadsEntity
   end
 end

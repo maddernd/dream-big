@@ -24,9 +24,9 @@ class JourneysApi < Grape::API
 
     # Auth...
 
-    createdJourney = Journey.create!(journey_parameters)
+    created_journey = Journey.create!(journey_parameters)
 
-    present createdJourney, with: Entities::JourneysEntity
+    present created_journey, with: Entities::JourneysEntity
   end
 
   desc 'Allow updating of a Journey'
@@ -43,10 +43,10 @@ class JourneysApi < Grape::API
 
     # Auth
 
-    updateJourney = Journey.find(params[:id])
-    updateJourney.update!(journey_parameters)
+    update_journey = Journey.find(params[:id])
+    update_journey.update!(journey_parameters)
 
-    present updateJourney, with: Entities::JourneysEntity
+    present update_journey, with: Entities::JourneysEntity
   end
 
   desc 'Delete the journey with the indicated id'

@@ -27,9 +27,9 @@ class AvatarApi < Grape::API
 
     # Auth...
 
-    createdAvatar = Avatar.create!(avatar_parameters)
+    created_avatar = Avatar.create!(avatar_parameters)
 
-    present createdAvatar, with: Entities::AvatarEntity
+    present created_avatar, with: Entities::AvatarEntity
   end
 
   desc 'Allow updating of a Avatar'
@@ -50,10 +50,10 @@ class AvatarApi < Grape::API
 
     # Auth
 
-    updateAvatar = Avatar.find(params[:id])
-    updateAvatar.update!(avatar_parameters)
+    update_avatar = Avatar.find(params[:id])
+    update_avatar.update!(avatar_parameters)
 
-    present updateAvatar, with: Entities::AvatarEntity
+    present update_avatar, with: Entities::AvatarEntity
   end
 
   desc 'Delete the Avatar with the indicated id'

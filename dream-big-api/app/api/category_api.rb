@@ -23,9 +23,9 @@ class CategoryApi < Grape::API
 
     # Auth...
 
-    createdCategory = Category.create!(category_parameters)
+    created_category = Category.create!(category_parameters)
 
-    present createdCategory, with: Entities::CategoryEntity
+    present created_category, with: Entities::CategoryEntity
   end
 
   desc 'Allow updating of a categories'
@@ -42,10 +42,10 @@ class CategoryApi < Grape::API
 
     # Auth
 
-    updateCategory = Category.find(params[:id])
-    updateCategory.update! category_parameters
+    update_category = Category.find(params[:id])
+    update_category.update! category_parameters
 
-    present updateCategory, with: Entities::CategoryEntity
+    present update_category, with: Entities::CategoryEntity
   end
 
   desc 'Delete the category with the indicated id'

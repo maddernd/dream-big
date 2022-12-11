@@ -26,9 +26,9 @@ class CategoryQuestionsApi < Grape::API
 
     # Auth...
 
-    createdQuestion = CategoryQuestion.create!(category_questions_parameters)
+    created_category_question = CategoryQuestion.create!(category_questions_parameters)
 
-    present createdQuestion, with: Entities::CategoryQuestionsEntity
+    present created_category_question, with: Entities::CategoryQuestionsEntity
   end
 
   desc 'Allow updating a Category Question'
@@ -47,10 +47,10 @@ class CategoryQuestionsApi < Grape::API
 
     # Auth
 
-    updateQuestion = CategoryQuestion.find(params[:id])
-    updateQuestion.update!(category_questions_parameters)
+    update_category_question = CategoryQuestion.find(params[:id])
+    update_category_question.update!(category_questions_parameters)
 
-    present updateQuestion, with: Entities::CategoryQuestionsEntity
+    present update_category_question, with: Entities::CategoryQuestionsEntity
   end
 
   desc 'Delete the Category Question with the indicated id'
@@ -64,8 +64,8 @@ class CategoryQuestionsApi < Grape::API
 
   desc 'Get all the catagory questions'
   get '/category-questions' do
-    catagoryQuestions = CategoryQuestion.all
+    catagory_questions = CategoryQuestion.all
 
-    present catagoryQuestions, with: Entities::CategoryQuestionsEntity
+    present catagory_questions, with: Entities::CategoryQuestionsEntity
   end
 end

@@ -28,9 +28,9 @@ class GoalsApi < Grape::API
 
     # Auth...
 
-    createdGoal = Goal.create!(goal_parameters)
+    created_goal = Goal.create!(goal_parameters)
 
-    present createdGoal, with: Entities::GoalsEntity
+    present created_goal, with: Entities::GoalsEntity
   end
 
   desc 'Allow updating of a Goal'
@@ -51,10 +51,10 @@ class GoalsApi < Grape::API
 
     # Auth
 
-    updateGoal = Goal.find(params[:id])
-    updateGoal.update!(goal_parameters)
+    update_goal = Goal.find(params[:id])
+    update_goal.update!(goal_parameters)
 
-    present updateGoal, with: Entities::GoalsEntity
+    present update_goal, with: Entities::GoalsEntity
   end
 
   desc 'Delete the Goal with the indicated id'
