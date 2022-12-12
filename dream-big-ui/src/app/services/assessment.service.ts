@@ -26,8 +26,6 @@ export class AssessmentService extends CachedEntityService<Assessment> {
     'id',
     'journey_id',
     'category_id'
-    
-
   );
   }
   public override createInstanceFrom(json: any, other?: any): Assessment{

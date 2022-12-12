@@ -8,7 +8,7 @@ import { AuthGuard } from './services/authguard.service';
 
 import { SolarSystemComponent } from './Components/SolarSystem/solar-system.component';
 import { KonvStarComponent } from './Components/KonvaStar/konv-star.component';
-
+import { PopUpComponent } from './Components/pop-up/pop-up.component';
 
 
 
@@ -19,7 +19,8 @@ const routes: Routes = [
   // { path: 'profile', canActivate: [AuthGuard], component: ProfileComponent },
   { path: 'star', component: StarControlComponent },
   { path: 'solar', component: SolarSystemComponent},
-  { path: 'konv-star', component: KonvStarComponent}
+  { path: 'konv-star', component: KonvStarComponent},
+  { path: 'pop-up', component: PopUpComponent}
 ];
 
 @NgModule({

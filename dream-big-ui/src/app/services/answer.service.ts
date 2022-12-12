@@ -24,10 +24,9 @@ export class AnswerService extends CachedEntityService<Answer> {
   
   this.mapping.addKeys(
     'id',
-    'question_id',
-    'assessment_id'
-    
-
+    'category_question_id',
+    'assessment_id',
+    'answer'
   );
   }
   public override createInstanceFrom(json: any, other?: any): Answer{

@@ -11,7 +11,6 @@ export class Section extends Entity {
   id: number = -1;
   planet_id: number = -1;
   category_id: number = -1;
-  
 
   /**
    * Indicates that the Unit has yet to be stored in the database
