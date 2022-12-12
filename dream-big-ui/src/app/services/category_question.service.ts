@@ -26,9 +26,6 @@ export class CategoryQuestionService extends CachedEntityService<CategoryQuestio
     'id',
     'question',
     'category_id',
-    'assessment_id'
-    
-
   );
   }
   public override createInstanceFrom(json: any, other?: any): CategoryQuestion{

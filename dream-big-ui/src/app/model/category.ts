@@ -4,14 +4,13 @@ const KEYS =
   [
     'id',
     'name',
-    'description',
+    'description'
   ];
 
 export class Category extends Entity {
   id: number = -1;
   name: string = "";
   description: string = "";
-
 
   /**
    * Indicates that the Unit has yet to be stored in the database
