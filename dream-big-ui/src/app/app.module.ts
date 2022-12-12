@@ -5,7 +5,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 import { NgMaterialModule } from './ng-material/ng-material.module';
@@ -72,7 +71,6 @@ import { PopUpComponent } from './Components/pop-up/pop-up.component';
     // AdminModule,
     TableComponentModule,
     NgMaterialModule,
-    MatDialogModule,
     RouterModule.forRoot([
       { path: '', redirectTo: '/login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },
