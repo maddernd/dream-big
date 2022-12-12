@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 
 import { NgMaterialModule } from './ng-material/ng-material.module';
@@ -37,6 +38,7 @@ import { KonvStarComponent } from './Components/KonvaStar/konv-star.component';
 import { SectionDialogComponent } from './Components/SolarSystem/section-dialog.component';
 import { AvatarComponent } from './helpers/avatar/avatar.component';
 import { AvatarContainerComponent } from './Components/profile/avatarContainer/avatar-container.component';
+import { PopUpComponent } from './Components/pop-up/pop-up.component';
 
 @NgModule({
   declarations: [
@@ -57,7 +59,8 @@ import { AvatarContainerComponent } from './Components/profile/avatarContainer/a
     SectionDialogComponent,
     AvatarComponent,
     ProfileComponent,
-    AvatarContainerComponent
+    AvatarContainerComponent,
+    PopUpComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -69,6 +72,7 @@ import { AvatarContainerComponent } from './Components/profile/avatarContainer/a
     // AdminModule,
     TableComponentModule,
     NgMaterialModule,
+    MatDialogModule,
     RouterModule.forRoot([
       { path: '', redirectTo: '/login', pathMatch: 'full' },
       { path: 'login', component: LoginComponent },

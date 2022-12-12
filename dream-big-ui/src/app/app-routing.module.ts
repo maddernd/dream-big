@@ -10,7 +10,7 @@ import { AuthGuard } from './services/authguard.service';
 // import { HomeComponent } from './Components/home/home.component';
 import { SolarSystemComponent } from './Components/SolarSystem/solar-system.component';
 import { KonvStarComponent } from './Components/KonvaStar/konv-star.component';
-
+import { PopUpComponent } from './Components/pop-up/pop-up.component';
 
 
 
@@ -23,7 +23,8 @@ const routes: Routes = [
   { path: 'star', component: StarControlComponent },
   // { path: 'star-map', component: StarMapComponent },
   { path: 'solar', component: SolarSystemComponent},
-  { path: 'konv-star', component: KonvStarComponent}
+  { path: 'konv-star', component: KonvStarComponent},
+  { path: 'pop-up', component: PopUpComponent}
 ];
 
 @NgModule({
