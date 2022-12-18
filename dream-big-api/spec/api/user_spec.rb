@@ -65,13 +65,3 @@ class UserSpec
 end
 
 
-
-
-
-        
-        
-    
-            
-
-
-

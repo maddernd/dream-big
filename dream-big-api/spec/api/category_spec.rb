@@ -60,13 +60,3 @@ class CategorySpec
 end
 
 
-
-
-
-        
-        
-    
-            
-
-
-
