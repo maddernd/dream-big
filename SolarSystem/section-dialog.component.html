@@ -1,0 +1,246 @@
+<mat-card class="mat-card">
+  <mat-card-header>
+
+  </mat-card-header>
+  <img id="dialog-image" mat-card-image>
+  <mat-card-content>
+    <app-steps></app-steps>
+    <div class="name">{{ data.category.name }}</div>
+    <div class="step-content-label">Please complete this self assesment to set up your {{ data.category.name }} section.</div>
+    <button [style.color]="color1" class="colorbutton1" (click)="updatecolor1()">{{color1}}</button>
+    <button [style.color]="color2" class="colorbutton2" (click)="updatecolor2()">{{color2}}</button>
+    <button [style.color]="color3" class="colorbutton3" (click)="updatecolor3()">{{color3}}</button>
+    <button [style.color]="color4" class="colorbutton4" (click)="updatecolor4()">{{color4}}</button>
+    <button [style.color]="color5" class="colorbutton5" (click)="updatecolor5()">{{color5}}</button>
+    <button [style.color]="color6" class="colorbutton6" (click)="updatecolor6()">{{color6}}</button>
+    <button [style.color]="color7" class="colorbutton7" (click)="updatecolor7()">{{color7}}</button>
+    <button [style.color]="color8" class="colorbutton8" (click)="updatecolor8()">{{color8}}</button>
+    <button [style.color]="color9" class="colorbutton9" (click)="updatecolor9()">{{color9}}</button>
+    <div class="select">
+      <h1>Never Achieve</h1>
+      <h1>Sometimes Achieve</h1>
+      <h1>Always Achieve</h1>
+    </div>
+
+    <div class="header">
+      <h1>Criteria 1</h1>
+      <h1>Criteria 2</h1>
+      <h1>Criteria 3</h1>
+    </div>
+
+    <input type="text" class="input" placeholder="Enter your justification in this box."/>
+
+</mat-card-content>
+  <mat-divider></mat-divider>
+  <mat-card-actions>
+    <div>
+      <div class="wizard"><app-star-wizard></app-star-wizard></div>
+    </div>
+  </mat-card-actions>
+</mat-card>
+
+<div class="five-pointed-star"></div>
+
+<style>.mat-card{
+  background: linear-gradient(157.28deg, rgba(255, 255, 255, 0.4) 0%, #F5D5E0 100%);
+  width: 400px;
+height: 600px;
+  right:400px;
+  top:100px;
+}
+
+.wizard{
+  position: absolute;
+
+left: 280px;
+top: 480px;
+}
+
+.five-pointed-star {
+    --star-color:grey;
+    margin:1em auto;
+    font-size:5em;
+    position: relative;
+    display: block;
+    width: 0px;
+    height: 0px;
+    left: 500px;
+    bottom: 450px;
+    border-right: 1em solid transparent;
+    border-bottom: 0.7em solid var(--star-color);
+    border-left: 1em solid transparent;
+    transform: rotate(35deg);
+   }
+
+   .five-pointed-star:before {
+    border-bottom: 0.8em solid var(--star-color);
+    border-left: 0.3em solid transparent;
+    border-right: 0.3em solid transparent;
+    position: absolute;
+    height: 0;
+    width: 0;
+    top: -0.45em;
+    left: -0.65em;
+    display: block;
+    content:"";
+    transform: rotate(-35deg);
+   }
+   .five-pointed-star:after {
+    position: absolute;
+    display: block;
+    top: 0.03em;
+    left: -1.05em;
+    width: 0;
+    height: 0;
+    border-right: 1em solid transparent;
+    border-bottom: 0.7em solid var(--star-color);
+    border-left: 1em solid transparent;
+    transform: rotate(-70deg);
+    content:"";
+   }
+
+   .name{
+    position: absolute;
+width: 360px;
+height: 80px;
+left: 120px;
+top: 80px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 700;
+font-size: 32px;
+line-height: 48px;
+display: flex;
+align-items: center;
+text-align: center;
+
+color: #1E1E1E;
+   }
+
+   .step-content-label{
+    position: absolute;
+width: 360px;
+height: 40px;
+left: 30px;
+top: 150px;
+
+font-family: 'Poppins';
+font-style: normal;
+font-weight: 500;
+font-size: 12px;
+line-height: 18px;
+display: flex;
+align-items: flex-end;
+
+color: #1E1E1E;
+   }
+
+   .colorbutton1{
+    position: absolute;
+    left: 224px;
+    top: 297px;
+    background-color: #F5D5E0;
+   }
+
+   .colorbutton2{
+    position: absolute;
+    left: 224px;
+    top: 267px;
+    background-color: #F5D5E0;
+   }
+
+   .colorbutton3{
+    position: absolute;
+    left: 224px;
+    top: 237px;
+    background-color: #F5D5E0;
+   }
+
+   .colorbutton4{
+    position: absolute;
+    left: 154px;
+    top: 297px;
+    background-color: #F5D5E0;
+   }
+
+   .colorbutton5{
+    position: absolute;
+    left: 154px;
+    top: 267px;
+    background-color: #F5D5E0;
+   }
+
+   .colorbutton6{
+    position: absolute;
+    left: 154px;
+    top: 237px;
+    background-color: #F5D5E0;
+   }
+
+   .colorbutton7{
+    position: absolute;
+    left: 294px;
+    top: 297px;
+    background-color: #F5D5E0;
+   }
+
+   .colorbutton8{
+    position: absolute;
+    left: 294px;
+    top: 267px;
+    background-color: #F5D5E0;
+   }
+
+   .colorbutton9{
+    position: absolute;
+    left: 294px;
+    top: 237px;
+    background-color: #F5D5E0;
+   }
+
+   .select{
+    position: absolute;
+width: 80px;
+height: 40px;
+left: 167px;
+top: 170px;
+display: flex;
+
+
+color: #1E1E1E;
+   }
+   .select > h1{
+    background-color: transparent;
+  margin: 5px;
+  padding: 5px;
+  font-size: 10px;
+   }
+
+   .header{
+    position: absolute;
+width: 70px;
+height: 5px;
+left: 50px;
+top: 220px;
+color: #1E1E1E;
+   }
+.header > h1{
+  font-weight: 600;
+  font-size: 10px;
+}
+
+.input{
+box-sizing: border-box;
+position: absolute;
+width: 320px;
+height: 140px;
+left: 60px;
+top: 340px;
+
+background: #FFFFFF;
+border-radius: 10px;
+}
+
+
+</style>
