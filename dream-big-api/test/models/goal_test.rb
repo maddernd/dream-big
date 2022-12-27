@@ -3,17 +3,17 @@ require "test_helper"
 class GoalTest < ActiveSupport::TestCase
   
   test "goal fixture exists for foreign key plans" do
-    assert_equal 1, goal(:goal).id
-    assert_equal goal(:goal).id, plans(:plan).goal_id
+    assert_equal 2, goals(:goal).id
+    assert_equal goals(:goal).id, plans(:plan).goal_id
   end
   
   test "goal fixture exists for foreign key reflections" do
-    assert_equal 2, goal(:goal).id
-    assert_equal goal(:goal).id, reflections(:refleciton).goal_id
+    assert_equal 2, goals(:goal).id
+    assert_equal goals(:goal).id, reflections(:reflection).goal_id
   end
 
   test "goal fixture exists" do
-    assert_equal "new goal", goal(:goal_2).description
+    assert_equal "new goal", goals(:goal_2).description
   end
 
   test "cant create an empty goal" do

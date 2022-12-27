@@ -4,5 +4,5 @@ admin:
 
 student:
   id: 1
-  firstname: student
+  firstName: student
   user: student

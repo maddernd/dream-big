@@ -1,6 +1,6 @@
 accessory:
-  id: 1
-  imgpath: "\path_to_accessory_image.jpg"
+ id: 1
+ imgpath: "path_to_accessory_image.jpg"
 accessory_2:
-  id: 2
-  imgpath: "\path_to_accessory_image_2.jpg"
+ id: 2
+ imgpath: "path_to_accessory_image_2.jpg"
