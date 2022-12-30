@@ -1,2 +1,4 @@
 class AvatarHead < ApplicationRecord
-end
+	has_one :avatar, foreign_key: :avatar_head_id
+  end
+  

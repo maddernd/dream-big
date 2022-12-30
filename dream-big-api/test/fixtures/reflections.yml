@@ -1,5 +1,4 @@
-reflection:
-  id: 1
+reflection_1:
   reflection_text: reflection_text_sample
-  section_id: 1
-  goal_id: 2
+  section: section_1
+  goal: goal_2

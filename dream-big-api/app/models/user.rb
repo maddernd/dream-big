@@ -7,6 +7,6 @@ class User < ApplicationRecord
     
     #Associations
     has_one :student
-    has_one :role
+    belongs_to :role
 
 end

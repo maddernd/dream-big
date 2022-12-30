@@ -1,0 +1,13 @@
+avatar_1:
+ avatar_hair: hair_1  (AvatarHair)
+ avatar_head: head_1  (AvatarHead)
+ avatar_torso: torso_1  (AvatarTorso)
+ avatar_accessory: accessory_1  (AvatarAccessory)
+ student: student_1
+
+avatar_2:
+ avatar_hair: hair_2  (AvatarHair)
+ avatar_head: head_2  (AvatarHead)
+ avatar_torso: torso_2  (AvatarTorso)
+ avatar_accessory: accessory_2  (AvatarAccessory)
+ student: student_1

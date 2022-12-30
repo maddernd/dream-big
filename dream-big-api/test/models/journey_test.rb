@@ -13,6 +13,6 @@ class JourneyTest < ActiveSupport::TestCase
   end
 
   test "journey fixture exists" do
-    assert_equal students(:admin).id, journeys(:admin).student_id
+    assert_equal students(:admin).id, journeys(:admin_journey).student_id
   end
 end

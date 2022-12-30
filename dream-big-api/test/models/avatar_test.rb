@@ -1,58 +1,67 @@
 require "test_helper"
 
 class AvatarTest < ActiveSupport::TestCase
-  
-  test "avatar fixture exists for foreign key" do
-    assert_equal 1, avatar(:avatar).id
-    assert_equal avatar(:avatar).id, students(:student).id
+  def setup
+    # create student
+    @student = Student.create(firstName: "John Doe")
+
+    # create avatar head, hair, torso, and accessory records
+    @avatar_head = AvatarHead.create(imgpath: "path_to_head_image.jpg")
+    @avatar_hair = AvatarHair.create(imgpath: "path_to_hair_image.jpg")
+    @avatar_torso = AvatarTorso.create(imgpath: "path_to_torso_image.jpg")
+    @avatar_accessory = AvatarAccessory.create(imgpath: "path_to_accessory_image.jpg")
+
+    # create avatar record
+    @avatar = Avatar.create(
+      student: @student,
+      avatar_head: @avatar_head,
+      avatar_hair: @avatar_hair,
+      avatar_torso: @avatar_torso,
+      avatar_accessory: @avatar_accessory,
+    )
   end
 
-  test "avatar hair fixture exists for foreign key" do
-    assert_equal 1, avatar_hair(:hair).id
-    assert_equal avatar_hair(:hair).id, avatar(:avatar).avatar_hairs_id
+  test "avatar belongs to association with student is valid" do
+    assert_equal @student, @avatar.student
   end
 
-  test "avatar head fixture exists for foreign key" do
-    assert_equal 1, avatar_head(:head).id
-    assert_equal avatar_head(:head).id, avatar(:avatar).avatar_head_id
+  test "avatar belongs to association with avatar head is valid" do
+    assert_equal @avatar_head, @avatar.avatar_head
   end
 
-  test "avatar torso fixture exists for foreign key" do
-    assert_equal 1, avatar_torso(:torso).id
-    assert_equal avatar_torso(:torso).id, avatar(:avatar).avatar_torsos_id
+  test "avatar belongs to association with avatar hair is valid" do
+    assert_equal @avatar_hair, @avatar.avatar_hair
   end
 
-  test "avatar accessories fixture exists for foreign key" do
-    assert_equal 1, avatar_accessories(:accessory).id
-    assert_equal avatar_accessories(:accessory).id, avatar(:avatar).avatar_accessories_id
+  test "avatar belongs to association with avatar torso is valid" do
+    assert_equal @avatar_torso, @avatar.avatar_torso
   end
 
-  test "should modify avatar accessories id and save avatar record " do
-    avatar = avatar(:avatar)
-    avatar.avatar_accessories_id = avatar_accessories(:accessory_2).id
-    avatar.save
-    assert_equal( avatar_accessories(:accessory_2).id, avatar.avatar_accessories_id, "accessories_id not modified")
-    end 
-    
-  test "should modify avatar hairs id and save avatar record " do
-    avatar = avatar(:avatar)
-    avatar.avatar_hairs_id = avatar_hair(:hair_2).id
-    avatar.save
-    assert_equal( avatar_hair(:hair_2).id, avatar.avatar_hairs_id, "hairs_id not modified")
+  test "avatar belongs to association with avatar accessory is valid" do
+    assert_equal @avatar_accessory, @avatar.avatar_accessory
   end
 
-  test "should modify avatar head id and save avatar record " do
-    avatar = avatar(:avatar)
-    avatar.avatar_head_id = avatar_head(:head_2).id
-    avatar.save
-    assert_equal( avatar_head(:head_2).id, avatar.avatar_head_id, "head_id not modified")
+  test "modifying avatar accessory and saving existing avatar record works" do
+    @avatar.avatar_accessory = AvatarAccessory.create(imgpath: "path_to_new_accessory_image.jpg")
+    @avatar.save
+    assert_equal @avatar.avatar_accessory.imgpath, "path_to_new_accessory_image.jpg"
   end
 
-  test "should modify avatar torsos id and save avatar record " do
-    avatar = avatar(:avatar)
-    avatar.avatar_torsos_id = avatar_torso(:torso_2).id
-    avatar.save
-    assert_equal(avatar_torso(:torso_2).id, avatar.avatar_torsos_id, "torsos_id not modified")
+  test "modifying avatar hair and saving existing avatar record works" do
+    @avatar.avatar_hair = AvatarHair.create(imgpath: "path_to_new_hair_image.jpg")
+    @avatar.save
+    assert_equal @avatar.avatar_hair.imgpath, "path_to_new_hair_image.jpg"
   end
 
+  test "modifying avatar head and saving existing avatar record works" do
+    @avatar.avatar_head = AvatarHead.create(imgpath: "path_to_new_head_image.jpg")
+    @avatar.save
+    assert_equal @avatar.avatar_head.imgpath, "path_to_new_head_image.jpg"
+  end
+
+  test "modifying avatar torso and saving existing avatar record works" do
+    @avatar.avatar_torso = AvatarTorso.create(imgpath: "path_to_new_torso_image.jpg")
+    @avatar.save
+    assert_equal @avatar.avatar_torso.imgpath, "path_to_new_torso_image.jpg"
+  end
 end

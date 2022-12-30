@@ -1,3 +1,5 @@
-role:
-  id: 1
+role_1:
   role_description: "role description"
+
+admin_role:
+  role_description: admin role

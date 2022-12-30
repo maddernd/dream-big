@@ -1,11 +1,9 @@
-goal:
- id: 2
- description: description_sample
+goal_1:
+ description: this is a description for goal 1
  status: test_status
- section_id: 1
+ section: section_1
 
 goal_2:
- id: 3
  description: new goal
  status: in progress
- section_id: 1
+ section: section_1
