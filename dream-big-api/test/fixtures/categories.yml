@@ -1,9 +1,7 @@
-category:
-  id: 1
-  name: test_category
-  description: description_of_category
+category_1:
+  name: Employability
+  description: Description of Employability
 
 category_2:
-  id: 2
-  name: second test category
-  description: description_of_category_2
+  name: Readiness
+  description: Description of Readiness

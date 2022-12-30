@@ -20,18 +20,18 @@ services:
     command:
       /bin/bash -c 'rm -f /api/tmp/pids/server.pid && bundle install && rails db:migrate RAILS_ENV=test && rails db:migrate && rails s -b 0.0.0.0'
 
-  ui:
-    image: ui:latest
-    container_name: dream-big-ui
-    build: ./dream-big-ui
-    ports:
-      - "4200:4200"
-    volumes:
-      - ./dream-big-ui:/dream-big-ui
-    depends_on:
-      - api
-    command:
-      /bin/bash -c 'npm install; npm start'
+  # ui:
+  #   image: ui:latest
+  #   container_name: dream-big-ui
+  #   build: ./dream-big-ui
+  #   ports:
+  #     - "4200:4200"
+  #   volumes:
+  #     - ./dream-big-ui:/dream-big-ui
+  #   depends_on:
+  #     - api
+  #   command:
+  #     /bin/bash -c 'npm install; npm start'
 
   dev-db:
     container_name: dream-big-dev-db

@@ -1,0 +1,5 @@
+head_1:
+  imgpath: "path_to_head_image.jpg"
+
+head_2:
+  imgpath: "path_to_head_image_2.jpg"

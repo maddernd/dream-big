@@ -2,7 +2,6 @@ admin:
   firstName: admin
   user: admin
 
-student:
-  id: 1
-  firstName: student
+student_1:
+  firstName: john
   user: student

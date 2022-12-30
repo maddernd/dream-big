@@ -1,9 +1,7 @@
-assessment:
-  id: 1
-  journey_id: 135138681
-  category_id: 1
+assessment_1:
+  journey: journey_1
+  category: category_1
 
 assessment_2:
-  id: 2
-  journey_id: 135138682
-  category_id: 2
+  journey: journey_2
+  category: category_2

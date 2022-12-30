@@ -1,2 +1,4 @@
 class AvatarTorso < ApplicationRecord
-end
+	has_one :avatar, foreign_key: :avatar_torso_id
+  end
+  
