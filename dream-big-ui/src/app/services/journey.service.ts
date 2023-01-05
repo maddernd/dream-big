@@ -24,8 +24,7 @@ export class JourneyService extends CachedEntityService<Journey> {
   
   this.mapping.addKeys(
     'id',
-    'student_id',
-    'assessment_id'
+    'student_id'
   );
   }
   public override createInstanceFrom(json: any, other?: any): Journey {

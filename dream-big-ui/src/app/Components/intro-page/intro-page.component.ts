@@ -3,6 +3,8 @@ import { Component, OnInit } from '@angular/core';
 import { Inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { PopUpComponent } from '../pop-up/pop-up.component';
 
 @Component({
   selector: 'app-intro-page',
@@ -15,7 +17,7 @@ export class IntroPageComponent implements OnInit {
 readonly numStars = 100;
 
 // Inject what we need to access the native document variable
-constructor(@Inject(DOCUMENT) private document: any,  private router: Router) { }
+constructor(@Inject(DOCUMENT) private document: any,  private router: Router, private dialogRef : MatDialog) { }
 
 ngOnInit() {
   // For every star we want to display
@@ -47,5 +49,9 @@ getRandomPosition() {
   var randomX = Math.floor(Math.random()*x);
   var randomY = Math.floor(Math.random()*y);
   return [randomX,randomY];
+}
+
+openDialog() {
+  this.dialogRef.open(PopUpComponent);
 }
 }

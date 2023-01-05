@@ -4,16 +4,26 @@ I18n.reload!
 
 # The data can be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
-def import_from_csv(path, model, attributes)
-  items = []
+def read_csv_path_for_model(file_name)
+  Rails.root.join('db', 'resources', "#{file_name}.csv")
+end
+
+# The attributes must match the database schema
+# Used to pass only specific values from the csv in an object format.
+def import_from_csv(model, attributes)
+  model_name_as_lowercase = "#{model}".downcase
+  plural_model_name = model_name_as_lowercase[-1] == 'y' ? "#{model_name_as_lowercase.delete_suffix('y')}ies" : "#{model_name_as_lowercase}s"
+  path = read_csv_path_for_model(plural_model_name)
+
   CSV.foreach(path, headers: true).map do |row|
     item = {}
+
     attributes.each do |attr|
       item[attr] = row[attr]
     end
-    items.append(item)
+
+    model.insert(item)
   end
-  model.insert_all(items)
 end
 
 def seed_data_parent_child(parent_model, parent_attributes, child_model, child_attributes, num)
@@ -55,7 +65,7 @@ def seed_child_data(parent_items, child_model, child_attributes, num_per_parent=
     end
   end
 
-  puts "Seeded #{parent_items.length()} #{child_model} records" 
+  puts "Seeded #{parent_items.length()} #{child_model} records"
   return items
 end
 
@@ -75,68 +85,4 @@ def seed_sequence_data(model, attributes, num)
   return items
 end
 
-def create_admin_user_student()
-  admin = User.find_or_initialize_by(email: 'admin')
-  admin.password = 'admin'
-  admin.username = 'admin'
-  admin.save!
-
-  admin_s = Student.find_or_initialize_by(user_id: admin.id)
-  admin_s.firstName = 'admin'
-  admin_s.save!
-
-  puts "Created user\nemail: admin\npassword: admin"
-  return admin_s
-
-end
-
-def faker_first_name()
-  return Faker::Name.first_name
-end
-
-def faker_name()
-  return Faker::Name.name
-end
-
-def faker_phone()
-  return Faker::PhoneNumber.extension
-end
-
-# import_from_csv(Rails.root.join('db','resources','users.csv'), User, ['name', 'username', 'password'])
-# import_from_csv(Rails.root.join('db','resources','categories.csv'), Category, ['name', 'description', 'weight'])
-# import_from_csv(Rails.root.join('db','resources','units.csv'), Unit, ['name', 'description', 'code'])
-
-
-# user_data = {
-#   'name': method(:faker_first_name),
-#   'email': method(:faker_email)
-#   'username': method(:faker_name),
-#   'password': method(:faker_name),
-# }
-# student_data = {
-#   'name': method(:faker_name),
-#   'phone': method(:faker_phone),
-#   'address': method(:faker_name),
-# }
-
-# seed_data_parent_child(User, user_data, Student, student_data, 5)
-
-
-admin_student = create_admin_user_student()
-# users = seed_sequence_data(User, ['username','email', 'password'], 5)
-
-student_journey = seed_child_data([admin_student], StudentJourney, ['timeline'])
-
-star_system_1 = seed_child_data(student_journey, StarSystem, ['status', 'name'])
-seed_child_data(star_system_1, Star, ['name', 'status'])
-seed_child_data(star_system_1, Planet, ['status', 'name'], 5)
-
-star_system_2 = seed_child_data(student_journey, StarSystem, ['status', 'name'])
-seed_child_data(star_system_2, Star, ['name', 'status'])
-seed_child_data(star_system_2, Planet, ['status', 'name'], 6)
-
-star_system_3 = seed_child_data(student_journey, StarSystem, ['status', 'name'])
-seed_child_data(star_system_3, Star, ['name', 'status'])
-seed_child_data(star_system_3, Planet, ['status', 'name'], 4)
-
-# seed_sequence_data(Category, ['name', 'description', 'weight'], 5)
+import_from_csv(User, ['name', 'username','email','password_digest'])

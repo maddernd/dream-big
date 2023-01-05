@@ -1,0 +1,5 @@
+torso_1:
+  imgpath: "path_to_torso_image.jpg"
+
+torso_2:
+  imgpath: "path_to_torso_image_2.jpg"

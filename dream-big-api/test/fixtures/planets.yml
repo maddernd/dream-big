@@ -1,0 +1,7 @@
+planet_1:
+  name: "test_planet one"
+  journey: journey_1
+
+planet_2:
+  name: "test_planet2"
+  journey: journey_2

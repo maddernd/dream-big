@@ -1,0 +1,9 @@
+goal_1:
+ description: this is a description for goal 1
+ status: test_status
+ section: section_1
+
+goal_2:
+ description: new goal
+ status: in progress
+ section: section_1

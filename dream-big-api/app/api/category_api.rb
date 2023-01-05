@@ -5,8 +5,8 @@ class CategoryApi < Grape::API
   get '/category/:id' do
     # Auth
 
-    result = Category.find(params[:id])
-    present result, with: Entities::CategoryEntity
+    category = Category.find(params[:id])
+    present category, with: Entities::CategoryEntity
   end
 
   desc 'Allow creation of a category'
@@ -23,14 +23,14 @@ class CategoryApi < Grape::API
 
     # Auth...
 
-    result = Category.create!(category_parameters)
+    created_category = Category.create!(category_parameters)
 
-    present result, with: Entities::CategoryEntity
+    present created_category, with: Entities::CategoryEntity
   end
 
   desc 'Allow updating of a categories'
   params do
-    optional :name, type: String, desc: 'The categoryr name'
+    optional :name, type: String, desc: 'The category name'
     optional :description, type: String, desc: 'The description of the category'
   end
   put '/category/:id' do
@@ -42,10 +42,10 @@ class CategoryApi < Grape::API
 
     # Auth
 
-    result = Category.find(params[:id])
-    result.update! category_parameters
+    update_category = Category.find(params[:id])
+    update_category.update! category_parameters
 
-    present result, with: Entities::CategoryEntity
+    present update_category, with: Entities::CategoryEntity
   end
 
   desc 'Delete the category with the indicated id'
@@ -57,9 +57,10 @@ class CategoryApi < Grape::API
     return true
   end
 
+  desc 'Get all the categories'
   get '/category' do
-    result = Category.all
+    categories = Category.all
 
-    present result, with: Entities::CategoryEntity
+    present categories, with: Entities::CategoryEntity
   end
 end

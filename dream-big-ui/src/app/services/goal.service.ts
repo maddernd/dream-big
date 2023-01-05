@@ -24,9 +24,9 @@ export class GoalService extends CachedEntityService<Goal> {
   
   this.mapping.addKeys(
     'id',
-    'goal_text',
-    'status',
-    'section_id'
+    'section_id',
+    'description',
+    'status'
   );
   }
   public override createInstanceFrom(json: any, other?: any): Goal {

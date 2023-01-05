@@ -10,8 +10,8 @@ class UsersApi < Grape::API
 
     # Auth
 
-    result = User.find(params[:id])
-    present result, with: Entities::UsersEntity
+    user = User.find(params[:id])
+    present user, with: Entities::UsersEntity
   end
 
   desc 'Allow creation of a user'
@@ -53,9 +53,9 @@ class UsersApi < Grape::API
         :role_id
       )
 
-    result = User.find(params[:id])
-    result.update! user_parameters
-    present result, with: Entities::UsersEntity
+    update_user = User.find(params[:id])
+    update_user.update! user_parameters
+    present update_user, with: Entities::UsersEntity
   end
 
   desc 'Delete the user with the indicated id'
@@ -67,6 +67,7 @@ class UsersApi < Grape::API
     true
   end
 
+  desc 'Get all the users'
   params do
     optional :filter, type: String, desc: 'Limit response to those users starting with this filter'
   end

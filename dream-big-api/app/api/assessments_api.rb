@@ -5,8 +5,8 @@ class AssessmentsApi < Grape::API
   get '/assessments/:id' do
     # Auth
 
-    result = Assessment.find(params[:id])
-    present result, with: Entities::AssessmentsEntity
+    assessment = Assessment.find(params[:id])
+    present assessment, with: Entities::AssessmentsEntity
   end
 
   desc 'Allow creation of an Assessments'
@@ -25,9 +25,9 @@ class AssessmentsApi < Grape::API
 
     # Auth...
 
-    result = Assessment.create!(assessments_parameters)
+    created_assessment = Assessment.create!(assessments_parameters)
 
-    present result, with: Entities::AssessmentsEntity
+    present created_assessment, with: Entities::AssessmentsEntity
   end
 
   desc 'Allow updating of a Assessments'
@@ -40,17 +40,16 @@ class AssessmentsApi < Grape::API
   put '/assessments/:id' do
     assessments_parameters = ActionController::Parameters.new(params)
       .permit(
-        :id,
         :journey_id,
         :category_id
       )
 
     # Auth
 
-    result = Assessment.find(params[:id])
-    result.update! assessments_parameters
+    update_assessment = Assessment.find(params[:id])
+    update_assessment.update! assessments_parameters
 
-    present result, with: Entities::AssessmentsEntity
+    present update_assessment, with: Entities::AssessmentsEntity
   end
 
   desc 'Delete the Assessments with the indicated id'
@@ -62,9 +61,10 @@ class AssessmentsApi < Grape::API
     return true
   end
 
+  desc 'Get all the assessments'
   get '/assessments' do
-    result = Assessment.all
+    assessments = Assessment.all
 
-    present result, with: Entities::AssessmentsEntity
+    present assessments, with: Entities::AssessmentsEntity
   end
 end

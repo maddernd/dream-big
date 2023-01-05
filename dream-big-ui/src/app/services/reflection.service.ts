@@ -24,9 +24,9 @@ export class ReflectionService extends CachedEntityService<Reflection> {
   
   this.mapping.addKeys(
     'id',
-    'reflection_text',
     'section_id',
-    'goal_id'
+    'goal_id',
+    'reflection_text'
   );
   }
   public override createInstanceFrom(json: any, other?: any): Reflection {

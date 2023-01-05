@@ -1,0 +1,11 @@
+admin_journey:
+   student: admin
+
+journey_1:
+   student: student_1
+
+journey_2:
+   student: student_1
+
+journey_3:
+   student: student_1

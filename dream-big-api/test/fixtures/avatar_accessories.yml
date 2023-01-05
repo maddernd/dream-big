@@ -1,0 +1,5 @@
+accessory_1:
+ imgpath: "path_to_accessory_image.jpg"
+ 
+accessory_2:
+ imgpath: "path_to_accessory_image_2.jpg"
