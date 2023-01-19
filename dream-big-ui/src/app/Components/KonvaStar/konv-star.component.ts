@@ -78,6 +78,12 @@ export class KonvStarComponent implements AfterViewInit {
         return score + newScore;
     }
 
+    /**
+     * Calculates the points for the inner spikes of the inner star for each category.
+     * Takes into account the scores and properties of the categories, as well as the previous and next categories.
+     * Scales the scores to fit within the size of the inner star, and determines the maximum edge length for each inner spike.
+     * @returns an array of Polygon objects containing the calculated points for each category
+     */
     private getCatPolygons() {
         let catPolygons: Polygon[] = [];
         var prevCategory = this.categories[this.categories.length - 1];
@@ -143,19 +149,29 @@ export class KonvStarComponent implements AfterViewInit {
         }
         return catPolygons;
     }
-
+    
     private addPolyToLayer() {
-        this.polyLayer.destroyChildren();
-        for (var i = 0; i < this.catPolygons.length; i++) {
+        this.polyLayer.removeChildren();
+        const text = new Konva.Text({
+            x: 10,
+            y: 20,
+            text: '',
+            fontSize: this.textSize,
+            fontFamily: this.textFont,
+            fill: this.textColour,
+            visible: false,
+        });
+        this.textLayer.add(text);
+
+        for (let i = 0; i < this.catPolygons.length; i++) {
             const poly = this.catPolygons[i];
 
-            var polygon = new Konva.Shape({
+            const polygon = new Konva.Shape({
                 x: this.centrePoint.x,
                 y: this.centrePoint.y,
                 fill: this.polygonFillColour,
                 stroke: 'black',
                 strokeWidth: 1,
-                // a Konva.Canvas renderer is passed into the sceneFunc function
                 sceneFunc(context, shape) {
                     context.beginPath();
                     context.moveTo(poly.points.centre.x, poly.points.centre.y);
@@ -164,36 +180,89 @@ export class KonvStarComponent implements AfterViewInit {
                     context.lineTo(poly.points.edgeR.x, poly.points.edgeR.y);
                     context.lineTo(poly.points.centre.x, poly.points.centre.y);
                     context.closePath();
-                    // Konva specific method
                     context.fillStrokeShape(shape);
-                }
-            });
-            this.textLayer.destroyChildren();
-
-            var text = new Konva.Text({
-                x: 10,
-                y: 20,
-                text: '',
-                fontSize: this.textSize,
-                fontFamily: this.textFont,
-                fill: this.textColour
+                },
             });
 
-            polygon.on('pointerenter', function (evt) {
-                this.setAttr('stroke', poly.category.colour);
-                this.setAttr('StrokeWidth', 3);
-                this.moveToTop();
-                text.setAttr('text', poly.category.name);
-            });
-            polygon.on('pointerleave', function () {
-                this.setAttr('stroke', 'black');
-                this.setAttr('StrokeWidth', 1);
-                text.setAttr('text', '');
-            });
+            this.addPolygonListeners(polygon, poly, text);
+
             this.polyLayer.add(polygon);
-            this.textLayer.add(text);   
         }
     }
+
+    private addPolygonListeners(polygon: Konva.Shape, poly: Polygon, text: Konva.Text) {
+        polygon.on('pointerenter', () => {
+            this.onPolygonEnter(polygon, poly, text);
+        });
+        polygon.on('pointerleave', () => {
+            this.onPolygonLeave(polygon, text);
+        });
+    }
+
+    private onPolygonEnter(polygon: Konva.Shape, poly: Polygon, text: Konva.Text) {
+        polygon.stroke(poly.category.colour);
+        polygon.strokeWidth(3);
+        polygon.moveToTop();
+        text.text(poly.category.name);
+        text.visible(true);
+    }
+
+    private onPolygonLeave(polygon: Konva.Shape, text: Konva.Text) {
+        polygon.stroke('black');
+        polygon.strokeWidth(1);
+        polygon.moveToBottom()
+        text.visible(false);
+    }
+    // private addPolyToLayer() {
+    //     this.polyLayer.destroyChildren();
+    //     for (var i = 0; i < this.catPolygons.length; i++) {
+    //         const poly = this.catPolygons[i];
+
+    //         var polygon = new Konva.Shape({
+    //             x: this.centrePoint.x,
+    //             y: this.centrePoint.y,
+    //             fill: this.polygonFillColour,
+    //             stroke: 'black',
+    //             strokeWidth: 1,
+    //             // a Konva.Canvas renderer is passed into the sceneFunc function
+    //             sceneFunc(context, shape) {
+    //                 context.beginPath();
+    //                 context.moveTo(poly.points.centre.x, poly.points.centre.y);
+    //                 context.lineTo(poly.points.edgeL.x, poly.points.edgeL.y);
+    //                 context.lineTo(poly.points.spike.x, poly.points.spike.y);
+    //                 context.lineTo(poly.points.edgeR.x, poly.points.edgeR.y);
+    //                 context.lineTo(poly.points.centre.x, poly.points.centre.y);
+    //                 context.closePath();
+    //                 // Konva specific method
+    //                 context.fillStrokeShape(shape);
+    //             }
+    //         });
+    //         this.textLayer.destroyChildren();
+
+    //         var text = new Konva.Text({
+    //             x: 10,
+    //             y: 20,
+    //             text: '',
+    //             fontSize: this.textSize,
+    //             fontFamily: this.textFont,
+    //             fill: this.textColour
+    //         });
+
+    //         polygon.on('pointerenter', function (evt) {
+    //             this.setAttr('stroke', poly.category.colour);
+    //             this.setAttr('StrokeWidth', 3);
+    //             this.moveToTop();
+    //             text.setAttr('text', poly.category.name);
+    //         });
+    //         polygon.on('pointerleave', function () {
+    //             this.setAttr('stroke', 'black');
+    //             this.setAttr('StrokeWidth', 1);
+    //             text.setAttr('text', '');
+    //         });
+    //         this.polyLayer.add(polygon);
+    //         this.textLayer.add(text);
+    //     }
+    // }
 
     private addSpikesToLayer() {
         this.starLayer.destroyChildren();
@@ -331,6 +400,16 @@ export class KonvStarComponent implements AfterViewInit {
     }
 
 }
+
+/**
+ * Calculates a point along a line given two endpoints of the line and a distance from the first endpoint.
+ * @param x1 - The x-coordinate of the first endpoint of the line.
+ * @param y1 - The y-coordinate of the first endpoint of the line.
+ * @param x2 - The x-coordinate of the second endpoint of the line.
+ * @param y2 - The y-coordinate of the second endpoint of the line.
+ * @param distance - The distance from the first endpoint to the desired point.
+ * @returns An object with the x and y coordinates of the point.
+ */
 function calculateLinePoint(x1: number, y1: number, x2: number, y2: number, distance: number) {
     var vx = x2 - x1;
     var vy = y2 - y1;

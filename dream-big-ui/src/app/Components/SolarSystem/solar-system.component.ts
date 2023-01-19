@@ -34,6 +34,8 @@ export class SolarSystemComponent implements AfterViewInit {
     private planetLayer: Konva.Layer;
     private starLayer: Konva.Layer;
     private sectionLayer: Konva.Layer;
+    private uiLayer: Konva.Layer;
+
     private bgRect: Konva.Rect;
     private planetText: Konva.Text;
     private planetList: Planet[] = [];
@@ -41,6 +43,7 @@ export class SolarSystemComponent implements AfterViewInit {
     private bgStarList: BgStar[] = [];
     private viewPlanet: Planet = {} as Planet;
     private isSolarSystemView: boolean = true;
+
 
     private orbitAnimation: Konva.Animation;
     private _viewSystemZoom: number = 3;
@@ -82,8 +85,6 @@ export class SolarSystemComponent implements AfterViewInit {
     private catPolygons: Polygon[] = [];
     private starData: StarData = {} as StarData;
 
-
-
     ngAfterViewInit(): void {
         // initialise the main konvajs stage object
         this.stage = new Konva.Stage({
@@ -97,6 +98,7 @@ export class SolarSystemComponent implements AfterViewInit {
         this.planetLayer = new Konva.Layer();
         this.starLayer = new Konva.Layer();
         this.sectionLayer = new Konva.Layer();
+        this.uiLayer = new Konva.Layer();
 
         // generate the background of the stage by randomly placing different white circles
         this.bgStarList = getBackgroundStars(NUM_BG_STARS, window.document.getElementById('container').clientWidth, window.document.getElementById('container').clientWidth);
@@ -115,11 +117,16 @@ export class SolarSystemComponent implements AfterViewInit {
             this.startViewingSolarSystem();
         }, 0);
     }
-
+    /**
+     * Initializes and displays the solar system view, including the journey star in the center
+    * and the planets orbiting it.
+    */
     private startViewingSolarSystem() {
+        // hide layers while creating objects so they do not flash onto the page
         this.planetLayer.hide();
         this.starLayer.hide();
         this.sectionLayer.hide();
+        this.uiLayer.hide();
 
         this.bgRect.removeEventListener('click');
         // unselect any clicked planets when the background is clicked
@@ -138,7 +145,7 @@ export class SolarSystemComponent implements AfterViewInit {
         this.sectionLayer.destroy();
         this.stage.add(this.planetLayer);
         this.stage.add(this.starLayer);
-
+        this.stage.add(this.uiLayer);
         // add planets from this.planetList to this.planetLayer
         // start planets watching for mouse events and create the orbiting animation
         this.addPlanetsToLayer();
@@ -154,13 +161,24 @@ export class SolarSystemComponent implements AfterViewInit {
         // this uses the scores from this.starData.
         this.catPolygons = getCatPolygons(this.starData);
         var starGroup = this.getStarGroup(this.starData.starCoords, { x: 0, y: 0 }, 'gold');
+
+        // create the "add planet" button
+        var addPlanetBtn = this.getAddPlanetBtn();
+        this.uiLayer.add(addPlanetBtn);
+        this.uiLayer.moveToTop();
+
         this.starLayer.add(starGroup);
         this.planetLayer.show();
         this.starLayer.show();
+        this.uiLayer.show();
     }
 
-    // has to be async so the toImage promise can be waited on
+    /**
+    * Initializes and displays the view for a single planet, including its sections and goals.
+    * @param planet The planet to display.
+    */
     private async startViewingPlanet(planet: Planet) {
+
         this.planetLayer.hide();
         this.starLayer.hide();
         this.sectionLayer.hide();
@@ -250,14 +268,78 @@ export class SolarSystemComponent implements AfterViewInit {
         this.sectionLayer.show();
     }
 
+    private getAddPlanetBtn() {
+        var horizontalRect = new Konva.Rect({
+            fill: 'white',
+            width: 100,
+            height: 20,
+            offsetX: 40,
+            cornerRadius: 10,
 
+        });
+        var verticalRect = new Konva.Rect({
+            fill: 'white',
+            width: 20,
+            height: 100,
+            offsetY: 40,
+            cornerRadius: 10,
+        });
+
+        // this is used as a cheap trick to cover the intersection of the horizontal and vertical rectangles that make up the plus sign
+        var middleRect = new Konva.Rect({
+            fill: 'white',
+            width: 23,
+            height: 23,
+            stroke: 'white',
+            strokeWidth: 3,
+            cornerRadius: 3,
+            offsetX: 1.5,
+            offsetY: 1.5
+        })
+
+        const x = window.document.getElementById('container').clientWidth / 15;
+        const y = (window.document.getElementById('container').clientHeight / 15) * 12;
+
+        var btnGroup = new Konva.Group({
+            x,
+            y
+        });
+
+        btnGroup.add(horizontalRect, verticalRect, middleRect);
+
+        btnGroup.on('mouseover', (e) => {
+            document.body.style.cursor = 'pointer';
+
+            verticalRect.setAttr('stroke', SELECT_CIRCLE_STROKE_COLOUR);
+            verticalRect.setAttr('strokeWidth', HIGHLIGHT_CIRCLE_STROKE_WIDTH);
+            horizontalRect.setAttr('stroke', SELECT_CIRCLE_STROKE_COLOUR);
+            horizontalRect.setAttr('strokeWidth', HIGHLIGHT_CIRCLE_STROKE_WIDTH);
+
+            console.log('display text that explains this button is for adding planets')
+        });
+        btnGroup.on('mouseout', (e) => {
+            document.body.style.cursor = 'default';
+            verticalRect.setAttr('stroke', '');
+            verticalRect.setAttr('strokeWidth', 0);
+            horizontalRect.setAttr('stroke', '');
+            horizontalRect.setAttr('strokeWidth', 0);
+            console.log('clear info text');
+        });
+        btnGroup.on('click', (e) => {
+            console.log('open create planet dialog')
+        })
+
+        middleRect.moveToTop();
+
+        return btnGroup;
+    }
 
     /**
-     * Generates a random circle with the assigned centre point and minimum and max sizes.
-     * @param point 
-     * @param minSize 
-     * @param maxSize 
-     * @returns circleData
+     * Generates a random circle with a randomly chosen fill color and a size between the specified minimum and maximum values.
+     * @param point The center point of the circle.
+     * @param minSize The minimum size of the circle.
+     * @param maxSize The maximum size of the circle.
+     * @returns An object containing data about the generated circle.
      */
     private getRandomCircle(point: Point, minSize: number, maxSize: number): CircleData {
         let fillColour = getRandomColourCode();
@@ -270,6 +352,11 @@ export class SolarSystemComponent implements AfterViewInit {
         return circleData;
     }
 
+    /**
+     * Generates a random list of sections for a planet, each with a random number of goals.
+     * Each goal has a random number of plans and reflections.
+     * @returns The generated list of sections.
+     */
     private getRandomSections() {
         const sections: Section[] = [];
         for (let i = 0; i < 4; i++) {
@@ -309,11 +396,9 @@ export class SolarSystemComponent implements AfterViewInit {
     }
 
     /**
-     * Creates a random number of planets and their orbit circles
-     * 
-     * Each planet has a random radius and speed
-     * 
-     * @returns planetList -> A list of randomly generated planets 
+     * Generates a random list of planets, each with a randomly chosen image and a randomly generated set of sections.
+     * Each planet is placed on a randomly determined orbit around a central point.
+     * @returns The generated list of planets.
      */
     public getPlanetList() {
         const planetList = [];
@@ -384,190 +469,181 @@ export class SolarSystemComponent implements AfterViewInit {
     }
 
     /**
-     * Uses the planets from this.planetList to create konva circles and images
-     * 
-     * Creates circles for the planets, images to display for the planets and orbit circles which the planets follow in their animation
-     * 
-     * The circles are used for hit detection (mouseover, mouseout, click)
-     * 
-     * Both are animated to simulate orbiting around the central star.
-     *   
-    */
-    private addPlanetsToLayer() {
-        this.planetLayer.hide();
-        this.planetLayer.destroyChildren();
-        const planetCircles = [];
-        const planetImgs = [];
+     * Creates a Konva.Circle object with the specified properties to represent a planet.
+     * @param {Planet} planet - The planet object to create the circle for.
+     * @returns {Konva.Circle} The Konva Circle object representing the planet.
+     */
+    private createPlanetCircle(planet: Planet) {
+        return new Konva.Circle({
+            x: planet.circle.center.x,
+            y: planet.circle.center.y,
+            stroke: planet.circle.strokeColour,
+            strokeWidth: planet.circle.strokeWidth,
+            radius: planet.circle.radius,
+            opacity: CIRCLE_OPACITY
+        });
+    }
 
-        for (let i = 0; i < this.planetList.length; i++) {
-            const planet = this.planetList[i];
+    /**
+     * Creates a Konva.Image object with the specified properties to represent a planet's image.
+     * @param {Planet} planet - The planet object to create the image for.
+     * @returns {Konva.Image} The Konva Image object representing the planet's image.
+     */
+    private createPlanetImage(planet) {
+        return new Konva.Image({
+            image: planet.image,
+            x: planet.circle.center.x - planet.circle.radius,
+            y: planet.circle.center.y - planet.circle.radius,
+            width: planet.circle.radius * 2,
+            height: planet.circle.radius * 2,
+        });
+    }
 
-            var planetCircle = new Konva.Circle({
-                x: planet.circle.center.x,
-                y: planet.circle.center.y,
-                stroke: planet.circle.strokeColour,
-                strokeWidth: planet.circle.strokeWidth,
-                radius: planet.circle.radius,
-                opacity: CIRCLE_OPACITY
-            });
+    /**
+     * Creates a Konva.Circle object with the specified properties to represent a planet's orbit.
+     * @param {Planet} planet - The planet object to create the orbit circle for.
+     * @returns {Konva.Circle} The Konva Circle object representing the planet's orbit.
+     */
+    private createOrbitCircle(planet) {
+        return new Konva.Circle({
+            x: planet.orbitCircle.center.x,
+            y: planet.orbitCircle.center.y,
+            stroke: planet.orbitCircle.strokeColour,
+            strokeWidth: planet.orbitCircle.strokeWidth,
+            fill: planet.orbitCircle.fillColour,
+            radius: planet.orbitCircle.radius
+        });
+    }
 
-            var planetImg = new Konva.Image({
-                image: planet.image,
-                x: planet.circle.center.x - planet.circle.radius,
-                y: planet.circle.center.y - planet.circle.radius,
-                width: planet.circle.radius * 2,
-                height: planet.circle.radius * 2,
-            });
+    /**
+     * Creates event listeners for a given planet object's Konva Circle object.
+     * @param {Planet} planet - The planet object to create the event listeners for.
+     */
+    private createPlanetEventListeners(planet) {
+        planet.kplanetCircle.on('mouseover', (e) => {
+            document.body.style.cursor = 'pointer';
+            if (!planet.clicked) {
+                planet.collided = true;
+                this.planetText.x(e.target.getAttr('x') - planet.name.length * 3);
+                this.planetText.y(e.target.getAttr('y') - 40);
+                this.planetText.text(planet.name);
 
-            this.planetList[i].kplanetCircle = planetCircle;
+                e.target.setAttr('stroke', HIGHLIGHT_CIRCLE_STROKE_COLOUR);
+                e.target.setAttr('strokeWidth', HIGHLIGHT_CIRCLE_STROKE_WIDTH);
+                e.target.setAttr('opacity', SELECT_CIRCLE_OPACITY);
+                e.target.moveToTop();
+                this.planetText.moveToTop();
+            }
+        });
+        planet.kplanetCircle.on('mouseout', (e) => {
+            document.body.style.cursor = 'default';
 
-            this.planetLayer.add(planetCircle);
-            this.planetLayer.add(planetImg);
+            // keep the clicked planet selected on mouseout
+            if (!planet.clicked) {
+                planet.collided = false;
 
-            this.planetText = new Konva.Text({
-                x: 0,
-                y: 0,
-                text: '',
-                fontSize: 15,
-                fontFamily: 'Arial',
-                fill: 'white'
-            });
-            this.planetLayer.add(this.planetText);
-            // tell konva not to track any events on the text object for optimisation purposes
-            this.planetText.listening(false);
-
-            planetCircle.on('mouseover', (e) => {
-                if (!planet.clicked) {
-                    planet.collided = true;
-                    this.planetText.x(e.target.getAttr('x') - planet.name.length * 3);
-                    this.planetText.y(e.target.getAttr('y') - 40);
-                    this.planetText.text(planet.name);
-
-                    e.target.setAttr('stroke', HIGHLIGHT_CIRCLE_STROKE_COLOUR);
-                    e.target.setAttr('strokeWidth', HIGHLIGHT_CIRCLE_STROKE_WIDTH);
-                    e.target.setAttr('opacity', SELECT_CIRCLE_OPACITY);
-                    e.target.moveToTop();
-                    this.planetText.moveToTop();
-                }
-            });
-            planetCircle.on('mouseout', (e) => {
-                // keep the clicked planet selected on mouseout
-                if (!planet.clicked) {
-                    planet.collided = false;
-
-                    this.planetText.text('');
-
-                    e.target.setAttr('stroke', CIRCLE_STROKE_COLOUR);
-                    e.target.setAttr('strokeWidth', CIRCLE_STROKE_WIDTH);
-                    e.target.setAttr('opacity', CIRCLE_OPACITY);
-
-                }
-            });
-            planetCircle.on('click', (e) => {
-                // reset any other clicked planets when a planet is clicked
-                for (let i = 0; i < this.planetList.length; i++) {
-                    this.planetList[i].collided = false;
-                    this.planetList[i].clicked = false;
-                    this.planetList[i].kplanetCircle.setAttrs({
-                        'stroke': CIRCLE_STROKE_COLOUR,
-                        'strokeWidth': CIRCLE_STROKE_WIDTH
-                    });
-                    this.planetList[i].lostFrames = 0;
-                }
-                // we open planet view as soon as a planet is clicked
-                // so all the below formatting is not required (at the moment)
-
-                // planet.clicked = true;
-                // planet.collided = true;
-
-                // text.text(planet.name);
-                // text.x(e.target.getAttr('x') - planet.name.length * 3);
-                // text.y(e.target.getAttr('y') - 40);
-
-                // e.target.setAttr('stroke', SELECT_CIRCLE_STROKE_COLOUR);
-                // e.target.setAttr('strokeWidth', SELECT_CIRCLE_STROKE_WIDTH);
-                // e.target.moveToTop();
-                // text.moveToTop();
-
-                this.startViewingPlanet(this.planetList[i]);
-            })
-
-            var orbitCircle = new Konva.Circle({
-                x: planet.orbitCircle.center.x,
-                y: planet.orbitCircle.center.y,
-                stroke: planet.orbitCircle.strokeColour,
-                strokeWidth: planet.orbitCircle.strokeWidth,
-                fill: planet.orbitCircle.fillColour,
-                radius: planet.orbitCircle.radius
-            });
-
-            // currently, just clear any currently clicked planets if an orbit circle is clicked
-            orbitCircle.on('click', (e) => {
                 this.planetText.text('');
-                for (let i = 0; i < this.planetList.length; i++) {
-                    this.planetList[i].collided = false;
-                    this.planetList[i].clicked = false;
-                    this.planetList[i].kplanetCircle.setAttrs({
-                        'stroke': CIRCLE_STROKE_COLOUR,
-                        'strokeWidth': CIRCLE_STROKE_WIDTH
-                    });
-                }
-            })
-            this.planetLayer.add(orbitCircle);
 
-            // TODO: highlight orbit circles on mouseover?
-            // orbitCircle.on('mouseover', function () {
-            //     planet.collided = true;
-            //     this.setAttr('stroke', HIGHLIGHT_ORBIT_CIRCLE_COLOUR);
-            //     this.setAttr('strokeWidth', HIGHLIGHT_ORBIT_CIRCLE_WIDTH);
-            // });
-            // orbitCircle.on('mouseout', function () {
-            //     this.setAttr('stroke', ORBIT_CIRCLE_STROKE_COLOUR);
-            //     this.setAttr('strokeWidth', ORBIT_CIRCLE_STROKE_WIDTH);
-            //     planet.collided = false;
-            // });
+                e.target.setAttr('stroke', CIRCLE_STROKE_COLOUR);
+                e.target.setAttr('strokeWidth', CIRCLE_STROKE_WIDTH);
+                e.target.setAttr('opacity', CIRCLE_OPACITY);
 
-            planetImgs.push(planetImg);
-            planetCircles.push(planetCircle);
-            orbitCircle.moveToBottom();
-            planetCircle.moveToTop();
-        }
+            }
+        });
+        planet.kplanetCircle.on('click', (e) => {
+            document.body.style.cursor = 'default';
 
-        var midpoint = this.getCanvasMidPoint();
+            // reset any other clicked planets when a planet is clicked
+            for (let i = 0; i < this.planetList.length; i++) {
+                this.planetList[i].collided = false;
+                this.planetList[i].clicked = false;
+                this.planetList[i].kplanetCircle.setAttrs({
+                    'stroke': CIRCLE_STROKE_COLOUR,
+                    'strokeWidth': CIRCLE_STROKE_WIDTH
+                });
+                this.planetList[i].lostFrames = 0;
+            }
+            this.startViewingPlanet(planet);
+        })
+    }
 
-        // animate the planets orbiting in perfect circles around the centre of the page
-        this.orbitAnimation = new Konva.Animation((frame) => {
+    /**
+     * Creates a Konva.Animation object to animate the orbits of the planets.
+     * @returns {Konva.Animation} The Konva Animation object representing the orbit animations.
+     */
+    private createOrbitAnimation() {
+        const midpoint = this.getCanvasMidPoint();
+        return new Konva.Animation((frame) => {
             for (var i = 0; i < this.planetList.length; i++) {
+                const planet = this.planetList[i];
                 // freeze the planet if it has collided with the cursor
-                if (!this.planetList[i].collided) {
+                if (!planet.collided) {
                     // obtain the current angle of the planet to the centre of the page
-                    var angle = getAngle(midpoint, this.planetList[i].circle.center);
+                    var angle = getAngle(midpoint, planet.circle.center);
                     // calculate an amount to add the current angle to simulate the planet moving around the circle
                     // this uses the current frame.time value in the calculation
                     // since planets can be frozen during mouse events, the number of lost frames for each planet must also be tracked
                     // the lost frames are subtracted from the frame.time value to ensure smooth movement for planets
-                    var add = ((frame.time - this.planetList[i].lostFrames) / 10) * this.planetList[i].speed / this.planetList[i].size;
+                    var add = ((frame.time - planet.lostFrames) / 10) * planet.speed / planet.size;
                     angle = angle + add;
                     angle = (Math.PI * angle) / 180;
                     // a new centre for the planet is calculated using the new angle
                     var newCentre = getCirclePoint(
                         midpoint,
-                        getDistance(midpoint, this.planetList[i].circle.center),
+                        getDistance(midpoint, planet.circle.center),
                         angle
                     );
                     // the planet circle is assigned to its new centre point
-                    planetCircles[i].x(newCentre.x);
-                    planetCircles[i].y(newCentre.y);
+                    planet.kplanetCircle.x(newCentre.x);
+                    planet.kplanetCircle.y(newCentre.y);
                     // the planet image must have its point adjusted, to ensure it is placed in the centre of the circle
-                    planetImgs[i].x(newCentre.x - this.planetList[i].circle.radius);
-                    planetImgs[i].y(newCentre.y - this.planetList[i].circle.radius);
+                    planet.kplanetImage.x(newCentre.x - planet.circle.radius);
+                    planet.kplanetImage.y(newCentre.y - planet.circle.radius);
                     // planetImgs[i].rotation((frame.time - this.planetList[i].lostFrames) % 360)
                 } else {
                     // increase the lost frames counter whenever the planet misses a frame due to mouse events
-                    this.planetList[i].lostFrames += frame.timeDiff;
+                    planet.lostFrames += frame.timeDiff;
                 }
             }
         }, this.planetLayer);
+    }
+    private addPlanetsToLayer() {
+        this.planetLayer.hide();
+        this.planetLayer.destroyChildren();
+
+        for (let i = 0; i < this.planetList.length; i++) {
+            const planet = this.planetList[i];
+
+            planet.kplanetCircle = this.createPlanetCircle(planet);
+            planet.kplanetImage = this.createPlanetImage(planet);
+            planet.korbitCircle = this.createOrbitCircle(planet);
+
+            this.createPlanetEventListeners(planet);
+
+            this.planetLayer.add(planet.kplanetCircle);
+            this.planetLayer.add(planet.kplanetImage);
+            this.planetLayer.add(planet.korbitCircle);
+
+            planet.korbitCircle.moveToBottom();
+            planet.kplanetCircle.moveToTop();
+        }
+
+        this.planetText = new Konva.Text({
+            x: 0,
+            y: 0,
+            text: '',
+            fontSize: 15,
+            fontFamily: 'Arial',
+            fill: 'white'
+        });
+        // tell konva not to track any events on the text object for optimisation purposes
+        this.planetText.listening(false);
+
+        this.planetLayer.add(this.planetText);
+
+        // animate the planets orbiting in perfect circles around the centre of the page
+        this.orbitAnimation = this.createOrbitAnimation();
+
         this.planetLayer.show();
     }
 
@@ -580,13 +656,12 @@ export class SolarSystemComponent implements AfterViewInit {
     }
 
     /**
-     * Create a black rectangle that fills the canvas container
-     * 
-     * Uses this.bgStarList to create Konva.Circles to create a starry background
-     * 
-     * Each star has a random opacity to simulate brightness
+     * Adds the background stars to the Konva bgLayer.
+     * Initializes the bgRect and adds it to the layer.
+     * Iterates through the bgStarList and creates a Konva Circle for each star.
+     * Disables events for all the stars for optimization purposes.
      */
-    private addBgStarsToLayer() {
+    private addBgStarsToLayer(): void {
         this.bgLayer.destroyChildren();
         this.bgRect = new Konva.Rect({
             x: 0,
@@ -598,30 +673,36 @@ export class SolarSystemComponent implements AfterViewInit {
 
         this.bgLayer.add(this.bgRect);
 
+        const starCircles: Konva.Circle[] = [];
         for (let i = 0; i < this.bgStarList.length; i++) {
             const bgStar = this.bgStarList[i];
-            var starCircle = new Konva.Circle({
+            const starCircle = new Konva.Circle({
                 x: bgStar.center.x,
                 y: bgStar.center.y,
                 radius: bgStar.radius,
                 opacity: bgStar.brightness / 10,
                 fill: 'white'
             });
-            this.bgLayer.add(starCircle);
+            starCircles.push(starCircle);
             // turn off events for all the stars for optimisation purposes
             starCircle.listening(false);
         }
+        this.bgLayer.add(...starCircles);
+        this.bgLayer.batchDraw();
     }
 
     /**
-     * Creates a Konva.Group containing the category polygons and the category star spikes, both as Konva.Shape
+     * Creates a Konva.Group for the Journey Star spikes with a given center point and fills them with a given color.
+     * Each spike in the group will have a Konva.Shape object representing a polygon,
+     * and a Konva.Text object representing the category name.
+     * The polygon and text will be highlighted when the mouse hovers over them.
+     * The group will also contain a Konva.Shape object representing a polygon connecting
+     * three of the spike points, which will also be highlighted on mouse hover.
      * 
-     * Sets up all mouse events for each of the category polygons to allow them to be highlighted and have their name displayed onscreen
-     * 
-     * @param starCoords 
-     * @param center 
-     * @param polyFillColour 
-     * @returns Konva.Group
+     * @param starCoords - An array of objects representing the coordinates of each star in the group.
+     * @param center - The center point of the group of stars.
+     * @param polyFillColour - The fill color for the polygon objects.
+     * @returns Konva.Group - The group of stars, polygons, and text.
      */
     private getStarGroup(starCoords: StarCoord[], center: Point, polyFillColour: string): Konva.Group {
         var starGroup = new Konva.Group({
@@ -702,8 +783,9 @@ export class SolarSystemComponent implements AfterViewInit {
             catSpike.on('pointerenter', (evt) => {
                 kPoly.setAttr('stroke', poly.category.colour);
                 kPoly.setAttr('StrokeWidth', 3);
-                evt.target.setAttr('opacity', 1);
                 kPoly.moveToTop();
+
+                evt.target.setAttr('opacity', 1);
                 text.setAttr('text', poly.category.name);
                 text.setAttr('x', mid.x - 35);
                 text.setAttr('y', mid.y + 75);

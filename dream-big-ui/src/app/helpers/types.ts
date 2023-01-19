@@ -70,7 +70,8 @@ export interface Planet extends CircleSprite {
     offset: Point
     orbitCircle: CircleData
     korbitCircle: Konva.Circle,
-    kplanetCircle: Konva.Circle
+    kplanetCircle: Konva.Circle,
+    kplanetImage?: Konva.Image,
     name: string
     speed: number
     lostFrames: number
