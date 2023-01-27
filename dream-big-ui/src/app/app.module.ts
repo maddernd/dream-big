@@ -9,12 +9,15 @@ import { MAT_DIALOG_DEFAULT_OPTIONS } from '@angular/material/dialog';
 import { NgMaterialModule } from './ng-material/ng-material.module';
 import { AppRoutingModule } from './app-routing.module';
 // import { AdminModule } from './admin/admin.module';
+import { QuillModule } from 'ngx-quill';
 
 // service imports
 import { CategoryService } from './services/category.service';
 import { UserService } from './services/user.service';
 import { StudentService } from './services/student.service';
 import { AuthService } from './services/auth.service';
+
+
 
 // component imports
 import { NavbarComponent } from './Components/navbar/navbar.component';
@@ -34,6 +37,7 @@ import { SectionDialogComponent } from './Components/SolarSystem/section-dialog.
 import { AvatarComponent } from './helpers/avatar/avatar.component';
 import { AvatarContainerComponent } from './Components/profile/avatarContainer/avatar-container.component';
 import { PopUpComponent } from './Components/pop-up/pop-up.component';
+import { QuillComponent } from './Components/quill/quill.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +56,8 @@ import { PopUpComponent } from './Components/pop-up/pop-up.component';
     AvatarComponent,
     ProfileComponent,
     AvatarContainerComponent,
-    PopUpComponent
+    PopUpComponent,
+    QuillComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -72,6 +77,7 @@ import { PopUpComponent } from './Components/pop-up/pop-up.component';
       { path: 'star-wizard', component: StarWizardComponent },
       { path: 'complete', component: CompleteWizardComponent },
     ]),
+    QuillModule.forRoot()
   ],
   providers: [
     UserService,

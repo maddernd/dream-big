@@ -1,0 +1,28 @@
+<br />
+<div class="container mt-3">
+  <div class="row">
+    <div class="col">
+      <quill-editor
+        class="content-editor"
+        [(ngModel)]="htmlText"
+        placeholder="Enter some text"
+        [modules]="quillConfig"
+        (onSelectionChanged)="onSelectionChanged($event)"
+        (onContentChanged)="onContentChanged($event)"
+        [styles]="{ height: '300px', width: '100%' }"
+        [formControl]="control"
+      ></quill-editor>
+      <br />
+    </div>
+    <div class="col">
+      <quill-view
+        [content]="control.value"
+        format="html"
+        theme="snow"
+      ></quill-view>
+    </div>
+  </div>
+  <div class="mt-3">
+    {{ control.value }}
+  </div>
+</div>
