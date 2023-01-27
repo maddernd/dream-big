@@ -1,42 +1,58 @@
 require "grape"
+require "bcrypt"
 
 class UsersApi < Grape::API
-  get "/users/:id" do
-    user_parameters = ActionController::Parameters.new(params).permit(:id)
 
-    user = User.find(params[:id])
-    present user, with: Entities::UsersEntity
+  desc "Retrieve a user by ID"
+  params do
+    requires :id, type: Integer, desc: "The ID of the user to retrieve"
+  end
+  get "/users/:id" do
+    user = User.find_by(id: params[:id])
+    if user.nil?
+      error!("User not found", 404)
+    else
+      present user, with: Entities::UsersEntity
+    end
   end
 
-  desc "Allow creation of a user"
+  desc "Create a new user"
   params do
     requires :username, type: String, desc: "The username used for login"
     requires :name, type: String, desc: 'The user\'s name'
     requires :email, type: String, desc: "The email used for login"
-    requires :password, type: String, desc: "The in-no-way secure password"
+    requires :password, type: String, desc: "The password for the user"
     requires :role_id, type: Integer, desc: "Role for the user"
   end
   post "/users" do
-    user_parameters = ActionController::Parameters.new(params).permit(:username, :name, :email, :password, :role_id)
+    user_params = declared(params, include_missing: false)
+    user_params[:password] = BCrypt::Password.create(user_params[:password])
+    user = User.create(user_params)
 
-    # use `create!` instead of `create` to raise an exception if there is a problem with the record
-    User.create!(user_parameters)
+    if user.valid?
+      present user, with: Entities::UsersEntity
+    else
+      error!(user.errors.full_messages, 400)
+    end
   end
 
-  desc "Allow updating of a user"
+  desc "Update an existing user"
   params do
     optional :username, type: String, desc: "The username used for login"
     optional :name, type: String, desc: 'The user\'s name'
-    requires :email, type: String, desc: "The email used for login"
-    optional :password, type: String, desc: "The in-no-way secure password"
+    optional :email, type: String, desc: "The email used for login"
+    optional :password, type: String, desc: "The password for the user"
     optional :role_id, type: Integer, desc: "Role for the user"
   end
   put "/users/:id" do
-    user_parameters = ActionController::Parameters.new(params).permit(:username, :name, :email, :password, :role_id)
-
-    update_user = User.find(params[:id])
-    update_user.update! user_parameters
-    present update_user, with: Entities::UsersEntity
+    user = User.find_by(id: params[:id])
+    if user.nil?
+      error!("User not found", 404)
+    else
+      user_params = ActionController::Parameters.new(params).permit(:username, :name, :email, :password, :role_id)
+      user.update(user_params)
+      present user, with: Entities::UsersEntity
+    end
   end
 
   desc "Delete the user with the indicated id"
@@ -44,8 +60,13 @@ class UsersApi < Grape::API
     requires :id, type: Integer, desc: "The id of the user to delete"
   end
   delete "/users/:id" do
-    User.find(params[:id]).destroy!
-    true
+    user = User.find_by(id: params[:id])
+    if user.nil?
+      error!("User not found", 404)
+    else
+      user.destroy
+      status 204
+    end
   end
 
   desc "Get all the users"
@@ -55,9 +76,10 @@ class UsersApi < Grape::API
   get "/users" do
     filter = params[:filter]
     if filter.nil?
-      User.all
+      users = User.all
     else
-      User.where("name LIKE ?", "#{filter}%")
+      users = User.where("name LIKE ?", "#{filter}%")
     end
+    present users, with: Entities::UsersEntity
   end
 end
