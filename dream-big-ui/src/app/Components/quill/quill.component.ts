@@ -1,6 +1,13 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
+// NOT WORKING???? if there is an error with the quill-editor concerning 'Delta'
+// change node_modules\ngx-quill\lib\quill-editor.component.d.ts to be:
+//
+// import QuillType  from 'quill';
+// import Delta from 'quill';
+
+
 @Component({
   selector: 'app-quill',
   templateUrl: './quill.component.html',
