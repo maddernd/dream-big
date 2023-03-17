@@ -80,7 +80,7 @@ Installation steps:
 
 - Create Dream Big folder and clone git repo
 
-    Once Node.Js has been installed, create a folder for where you want the DreamBig project to be stored. Open a terminal window at that location then type in and run `git clone https://github.com/maddernd/dream-big`. The DreamBig project should now be copied into the folder you created earlier, open this folder in Visual Code or other code editors of your choice.
+    Once Node.Js has been installed, create a folder for where you want the DreamBig project to be stored. Open a terminal window at that location then type in and run `git clone https://github.com/thoth-tech/dream-big`. The DreamBig project should now be copied into the folder you created earlier, open this folder in Visual Code or other code editors of your choice.
 
 - Install Angular
 
@@ -122,9 +122,11 @@ Installation steps:
 
 ## **Backend Developer Set Up**
 
+### You need to fork this repository to your GitHub account before continuing
+
 1. Open your terminal and navigate to location where you want to store Dream-Big folder. 
 
-2. Run `git clone https://github.com/maddernd/dream-big`. The folder should be in your location and you can run `code .` to open the folder in visual studio code. Use `git pull` to get the latest version of Dream Big.
+2. Run `git clone https://github.com/[your-github-username]/dream-big`. The folder should be in your location and you can run `code .` to open the folder in visual studio code. Use `git pull` to get the latest version of Dream Big.
 
 3. If `code .` is not working, open the Visual Studio Code application, and type `Command + Shift + P` and type the command `install code`. Then enter it. Visual Studio Application: shell command ' code' successfully installed in PATH will pop up and you will be able to use `code `. to open up visual studio code. 
 
