@@ -4,7 +4,6 @@ module Entities
     expose :username
     expose :name
     expose :email
-    expose :password
     expose :role_id
   end
 end
