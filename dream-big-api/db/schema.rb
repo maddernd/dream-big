@@ -150,6 +150,8 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_13_035136) do
     t.string "email"
     t.string "password_digest"
     t.bigint "role_id"
+    t.string "auth_token"
+    t.datetime "auth_token_expiry" 
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["role_id"], name: "fk_rails_642f17018b"
