@@ -17,21 +17,23 @@ module DreamBig_Api
     # Authentication method default is database, but possible settings
     # are: database, aaf, or saml. It can be overridden using the DF_AUTH_METHOD
     # environment variable.
-    config.auth_method = (ENV['DF_AUTH_METHOD'] || :database).to_sym
+    config.auth_method = (ENV['DB_AUTH_METHOD'] || :database).to_sym
 
     # AAF authentication
     if config.auth_method == :aaf
       config.aaf = HashWithIndifferentAccess.new
       # URL of the issuer (i.e., https://rapid.[test.]aaf.edu.au)
-      config.aaf[:issuer_url] = ENV['DF_AAF_ISSUER_URL'] || 'https://rapid.test.aaf.edu.au'
+      config.aaf[:issuer_url] = ENV['DB_AAF_ISSUER_URL'] || 'https://rapid.test.aaf.edu.au'
       # URL of the registered application (e.g., https://dreambig.unifoo.edu.au)
-      config.aaf[:audience_url] = ENV['DF_AAF_AUDIENCE_URL']
+      config.aaf[:audience_url] = ENV['DB_AAF_AUDIENCE_URL']
       # The secure URL within your application that AAF Rapid Connect should
       # POST responses to (e.g., https://dreambig.unifoo.edu.au/auth/jwt)
-      config.aaf[:callback_url] = ENV['DF_AAF_CALLBACK_URL']
+      config.aaf[:callback_url] = ENV['DB_AAF_CALLBACK_URL']
       # URL of the unique url provided by rapid connect used for redirect
       # (e.g., https://rapid.aaf.edu.au/jwt/authnrequest/auresearch/XXXXXXX)
-      config.aaf[:redirect_url] = ENV['DF_AAF_UNIQUE_URL']
+      config.aaf[:redirect_url] = ENV['DB_AAF_UNIQUE_URL']
+      # Secret key to decrypt the JWT from AAF
+      config.aaf[:secret_decoder] = ENV['DB_AAF_SECRET_DECODER']
     end
 
 

@@ -32,8 +32,7 @@ class AuthenticationApi < Grape::API
       error!({ error: 'JWS was not found in the request'}, 500) unless jws
 
       # Decode JWS
-      # TODO: Secret will be passed in as an environment variable
-      jwt = JSON::JWT.decode(jws.to_s, 'secretsecret')
+      jwt = JSON::JWT.decode(jws.to_s, DreamBig_Api::Application.config.aaf["secret_decoder"])
       error!({ error: 'Invalid JWS.' }, 500) unless jwt
 
       # User lookup via unique login id, since this is the only authentication method
