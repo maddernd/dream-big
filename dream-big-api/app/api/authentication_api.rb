@@ -65,11 +65,34 @@ class AuthenticationApi < Grape::API
         user.save
       end
 
-      # TODO: Generate a temporary auth_token for future requests
-      # TODO: Add https for production environment and injected temporary token
+      User.generate_token(user)
+
+      # TODO: Add https for production environment
       host = 'http://localhost:4200'
 
-      redirect "#{host}/login?authToken=#{"token-to-inject"}&username=#{user.username}"
+      redirect "#{host}/login?authToken=#{user.auth_token}&username=#{user.username}"
+    end
+
+    desc 'Authentication login process'
+    params do
+      requires :username, type: String, desc: 'The user\'s username'
+      requires :auth_token, type: String, desc: 'The user\'s temporary auth token'
+    end
+    post '/authentication/login' do
+      user = User.find_by(username: params[:username])
+
+      # Ensure user allows logging in via a temporary token
+      is_invalid_login = user.nil? || user.auth_token.nil? || user.auth_token_expiry.nil?
+      error!({ error: 'Invalid email or token'}, 401) if is_invalid_login
+
+      is_invalid_token = user.auth_token != params[:auth_token] || user.auth_token_expiry < Time.zone.now
+      error!({ error: 'Invalid email or token'}, 401) if is_invalid_token
+
+      User.invalidate_token(user)
+
+      token = JwtHelpers.jwt_encode(user_id: user.id)
+      response = { token: token }
+      present response, with: Grape::Presenters::Presenter
     end
   end
 
@@ -83,9 +106,9 @@ class AuthenticationApi < Grape::API
     end
     post '/authentication/login' do
       @user = User.find_by_email(params[:email])
-      doesUserDetailsMatchPayload = @user&.authenticate(params[:password])
+      does_user_details_match_payload = @user&.authenticate(params[:password])
 
-      if doesUserDetailsMatchPayload
+      if does_user_details_match_payload
         token = JwtHelpers.jwt_encode(user_id: @user.id)
         response = { token: token }
         present response, with: Grape::Presenters::Presenter
