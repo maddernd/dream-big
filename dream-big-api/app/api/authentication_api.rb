@@ -66,11 +66,12 @@ class AuthenticationApi < Grape::API
         user.save
       end
 
-      # TODO: Generate a temporary auth_token for future requests
+      User.generate_token(user)
+
       # TODO: Add https for production environment and injected temporary token
       host = 'http://localhost:4200'
 
-      redirect "#{host}/login?authToken=#{"token-to-inject"}&username=#{user.username}"
+      redirect "#{host}/login?authToken=#{user.auth_token}&username=#{user.username}"
     end
   end
 
