@@ -19,6 +19,9 @@ export class LoginComponent implements OnInit {
   submitted = false;
   returnUrl: string;
   error = '';
+  // Query parameters
+  queryAuthToken = '';
+  queryUsername = '';
 
   constructor(
     @Inject(DOCUMENT)
@@ -40,15 +43,21 @@ export class LoginComponent implements OnInit {
   }
  
   async ngOnInit()  {
+    // Login automatically if query parameters are passed
+    this.queryUsername = this.route.snapshot.queryParams["username"];
+    this.queryAuthToken = this.route.snapshot.queryParams["authToken"];
+
     this.loginForm = this.fb.group({
         username: ['', Validators.required],
         password: ['', Validators.required]
     });
 
+    // TODO: Fix return url when using AAF authentication
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     
     // If we are logging in using AAF then we want to redirect to the AAF login
+    // Otherwise we go with the standard database login approach
     await this.authService.loadLoginMethod().then((loadedLoginMethod) => {
       loadedLoginMethod.subscribe((loginMethod) => {
         const { method, redirect_to } = loginMethod;
