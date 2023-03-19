@@ -8,11 +8,11 @@ import { map } from "rxjs/operators";
 @Injectable({
   providedIn: 'root'
 })
-
 export class AuthService {
 
   uri = 'http://localhost:3000';
   token: any;
+  public loginMethod: any;
   private currentUserSubject: BehaviorSubject<User>;
   public currentUser: Observable<User>;
 
@@ -25,6 +25,10 @@ export class AuthService {
 
   public get currentUserValue(): User {
     return this.currentUserSubject.value;
+  }
+
+  async loadLoginMethod() {
+    return this.http.get<any>(this.uri + '/api/authentication/method');
   }
 
   login(email: string, password: string) {
