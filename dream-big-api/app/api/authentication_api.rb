@@ -35,6 +35,9 @@ class AuthenticationApi < Grape::API
       jwt = JSON::JWT.decode(jws.to_s, DreamBig_Api::Application.config.aaf["secret_decoder"])
       error!({ error: 'Invalid JWS.' }, 500) unless jwt
 
+      # Ensure JWT is a valid AAF token that can be used
+      error!({ error: 'Invalid JWT.' }, 500) unless User.is_valid_aaf_jwt(jwt)
+      
       # User lookup via unique login id, since this is the only authentication method
       # AAF handles the unique ids
       attrs = jwt['https://aaf.edu.au/attributes']
@@ -51,8 +54,6 @@ class AuthenticationApi < Grape::API
 
       # Set username if not yet specified
       user.username = username if user.username.nil?
-
-      # TODO: Add validation of JWS via user model to check expiry of JWS
 
       # Try and save the user once authenticated if new
       if user.new_record?
