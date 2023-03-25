@@ -43,21 +43,32 @@ export class LoginComponent implements OnInit {
   }
  
   async ngOnInit()  {
-    // Login automatically if query parameters are passed
+    // get return url from route parameters or default to '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+   
+    // Login automatically if query parameters are passed for AAF
     this.queryUsername = this.route.snapshot.queryParams["username"];
     this.queryAuthToken = this.route.snapshot.queryParams["authToken"];
 
-    this.loginForm = this.fb.group({
-        username: ['', Validators.required],
-        password: ['', Validators.required]
-    });
+    if (this.queryUsername && this.queryAuthToken) {
+      this.submitted = true;
+      this.loading = true;
+      this.authService.loginViaToken(this.queryUsername, this.queryAuthToken)
+        .pipe(first())
+        .subscribe(
+          data => {
+            this.router.navigate(['/intro']);
+          },
+          error => {
+            this.error = error;
+            this.loading = false;
+          }
+        );
+    }
 
-    // TODO: Fix return url when using AAF authentication
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-    
-    // If we are logging in using AAF then we want to redirect to the AAF login
-    // Otherwise we go with the standard database login approach
+    // If we are logging in using AAF then we want to redirect to the AAF login (we then go back to this
+    // page with the url parameters defined above)
+
     await this.authService.loadLoginMethod().then((loadedLoginMethod) => {
       loadedLoginMethod.subscribe((loginMethod) => {
         const { method, redirect_to } = loginMethod;
@@ -70,7 +81,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    console.log("ngAfterContentInit", this.authService.loginMethod)
+    // Prepare for normal logging in for database connections
+    this.loginForm = this.fb.group({
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
   }
 
   // convenience getter for easy access to form fields
