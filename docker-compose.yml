@@ -20,6 +20,8 @@ services:
       # The DF_AUTH_METHOD can only be (aaf | database)
       DB_AUTH_METHOD: aaf
       DB_AAF_UNIQUE_URL: 'https://rapid.test.aaf.edu.au/jwt/authnrequest/research/uANgVtrYRGBUu586xWsw4Q'
+      DB_AAF_ISSUER_URL: 'http://localhost.com'
+      DB_AAF_AUDIENCE_URL: 'dreambig'
       DB_AAF_SECRET_DECODER: 'secretsecret'
     command:
       /bin/bash -c 'rm -f /api/tmp/pids/server.pid && bundle install && rails db:migrate RAILS_ENV=test && rails db:migrate && rails s -b 0.0.0.0'

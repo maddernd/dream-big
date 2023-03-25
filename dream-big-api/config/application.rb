@@ -34,6 +34,9 @@ module DreamBig_Api
       config.aaf[:redirect_url] = ENV['DB_AAF_UNIQUE_URL']
       # Secret key to decrypt the JWT from AAF
       config.aaf[:secret_decoder] = ENV['DB_AAF_SECRET_DECODER']
+
+      # TODO: If we don't have any of these fields then throw an error
+      # as we actually require all of these for AAF to work properly
     end
 
 
