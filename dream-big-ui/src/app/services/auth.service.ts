@@ -47,6 +47,19 @@ export class AuthService {
       );
   }
 
+  loginViaToken(username, authToken) {
+    return this.http
+      .post<any>(this.uri + '/api/authentication/login', { username: username, auth_token: authToken })
+      .pipe(
+        map(user => {
+          // TODO: Find way to locally cache user using JWT credentials
+          // since we're no longer using basic auth
+          this.currentUserSubject.next(user);
+          return user;
+        })
+      );
+  }
+
   logout() {
     // remove user from local storage to log user out
     localStorage.removeItem("currentUser");
