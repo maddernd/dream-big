@@ -1,8 +1,9 @@
 
 <div class ="main">
   <p class ="sign" >Sign in</p>
-    <input class = "un" type="text" placeholder="Email" [(ngModel)]="email">
-    <input class= "pass" type="password" placeholder="Password" [(ngModel)]="password" />
-    <button class ="submit" type="submit" (click)="onSubmit()">Sign In</button>
-    <p class="forgot">Forgot Password?</p>
+  <input class = "un" type="text" placeholder="Email" [(ngModel)]="email">
+  <input class= "pass" type="password" placeholder="Password" [(ngModel)]="password" />
+  <p class="error">{{error}}</p>
+  <button class ="submit" type="submit" (click)="onSubmit()">Sign In</button>
+  <p class="forgot">Forgot Password?</p>
 </div>
