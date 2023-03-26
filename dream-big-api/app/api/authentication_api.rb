@@ -68,7 +68,7 @@ class AuthenticationApi < Grape::API
 
       User.generate_token(user)
 
-      # TODO: Add https for production environment
+      # TODO: Add https for production environment (using callback environment variable)
       host = 'http://localhost:4200'
 
       redirect "#{host}/login?authToken=#{user.auth_token}&username=#{user.username}"

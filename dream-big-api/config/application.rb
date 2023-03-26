@@ -31,12 +31,24 @@ module DreamBig_Api
       config.aaf[:callback_url] = ENV['DB_AAF_CALLBACK_URL']
       # URL of the unique url provided by rapid connect used for redirect
       # (e.g., https://rapid.aaf.edu.au/jwt/authnrequest/auresearch/XXXXXXX)
-      config.aaf[:redirect_url] = ENV['DB_AAF_UNIQUE_URL']
+      config.aaf[:redirect_url] = ENV['DB_AAF_REDIRECT_URL']
       # Secret key to decrypt the JWT from AAF
       config.aaf[:secret_decoder] = ENV['DB_AAF_SECRET_DECODER']
 
-      # TODO: If we don't have any of these fields then throw an error
-      # as we actually require all of these for AAF to work properly
+      if config.aaf[:issuer_url].nil? ||
+        config.aaf[:audience_url].nil? ||
+        config.aaf[:callback_url].nil? ||
+        config.aaf[:redirect_url].nil? ||
+        config.aaf[:secret_decoder].nil?
+
+        raise "Invalid values specified to AAF, check the following environment variables: \n" \
+              "  key                          => variable set?\n"\
+              "  DB_AAF_ISSUER_URL            => #{!ENV['DB_AAF_ISSUER_URL'].nil?}\n"\
+              "  DB_AAF_AUDIENCE_URL          => #{!ENV['DB_AAF_AUDIENCE_URL'].nil?}\n"\
+              "  DB_AAF_CALLBACK_URL          => #{!ENV['DB_AAF_CALLBACK_URL'].nil?}\n"\
+              "  DB_AAF_REDIRECT_URL            => #{!ENV['DB_AAF_REDIRECT_URL'].nil?}\n"\
+              "  DB_SECRET_KEY_AAF            => #{!ENV['DB_AAF_SECRET_DECODER'].nil?}\n"
+      end
     end
 
 
