@@ -102,7 +102,9 @@ export class LoginComponent implements OnInit {
           data => {
               this.router.navigate(['/intro']);
           },
-          error => {
+          erroredResult => {
+              const errorInformation = erroredResult.error;
+              const { error } = errorInformation;
               this.error = error;
               this.loading = false;
           }
