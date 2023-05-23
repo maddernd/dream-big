@@ -25,7 +25,7 @@
 
 .step-divider {
     height: 2px;
-    background: $blue;
+    background:black;
     flex: 1;
     margin: 0px 10px;
 }
@@ -34,6 +34,7 @@
     background: $blue;
     color: $white;
 }
+
 
 .step-incomplete {
     cursor: not-allowed;

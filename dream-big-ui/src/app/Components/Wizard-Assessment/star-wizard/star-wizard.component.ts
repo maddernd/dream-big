@@ -14,9 +14,12 @@ export class StarWizardComponent implements OnInit {
 
   currentStep: Observable<StepModel>;
 
+
   constructor(
     private stepsService: StepsService,
     private router: Router) { }
+
+
 
   ngOnInit(): void {
     this.currentStep = this.stepsService.getCurrentStep();
@@ -30,8 +33,9 @@ export class StarWizardComponent implements OnInit {
     }
   }
 
+
   showButtonLabel() {
-    return !this.stepsService.isLastStep() ? 'Continue' : 'Finish';
+    return !this.stepsService.isLastStep() ? "" : 'Finish';
   }
 
   onSubmit(): void {
